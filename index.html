@@ -1,0 +1,1167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gomart</title>
+</head>
+<style>
+* { box-sizing: border-box; }
+
+header {
+    padding-left: 30px;
+    padding-right: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+#logo { width: 130px; height: 60px; object-fit: cover; }
+.dropdown { position: relative; display: inline-block; }
+.triger {
+    background-color: white; border: none; font-size: 16px;
+    padding: 20px 10px; cursor: pointer; transition: background-color 0.25s;
+}
+.triger:hover { background-color: #ccc; }
+.Buttontry {
+    padding: 10px; width: 120px; border-radius: 20px;
+    color: white; border: 1px solid rgb(255,181,44);
+    background-color: orange; cursor: pointer; transition: background-color 0.25s;
+}
+.Buttontry:hover { background-color: rgb(255,198,93); }
+.menu {
+    display: none; position: absolute; top: 100%; left: 0;
+    background: #fff; border: 1px solid #ccc; border-radius: 8px;
+    min-width: 160px; z-index: 100; text-align: left;
+}
+.menu a { display: block; padding: 10px 16px; text-decoration: none; color: #000; }
+.menu a:hover { background: #f5f5f5; }
+.dropdown:hover .menu { display: block; }
+
+main { margin-top: 80px; }
+
+/* ── TITLE ── */
+.title {
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 100; margin-top: 60px;
+    display: flex; flex-direction: column; align-items: center;
+}
+#myh2 {
+    font-weight: 100; font-size: 30px; text-align: center;
+    padding-left: 100px; padding-right: 100px;
+}
+
+/* ── BLUR TEXT CHANGER ── */
+.text-changer {
+    height: 58px; display: flex; justify-content: center;
+    align-items: center; font-size: 25px; gap: 0; width: 100%;
+}
+.intro-text { margin: 0; white-space: nowrap; flex-shrink: 0; }
+.roles-container {
+    overflow: visible; position: relative;
+    width: 280px; height: 58px; flex-shrink: 0;
+}
+.role {
+    position: absolute; top: 0; left: 0; margin: 0;
+    padding-left: 6px; white-space: nowrap;
+    opacity: 0; filter: blur(12px);
+    animation: blurFade 9s infinite;
+}
+.role:nth-child(1) { animation-delay: 0s; }
+.role:nth-child(2) { animation-delay: 2.25s; }
+.role:nth-child(3) { animation-delay: 4.5s; }
+.role:nth-child(4) { animation-delay: 6.75s; }
+@keyframes blurFade {
+    0%   { opacity: 0; filter: blur(12px); transform: translateY(6px); }
+    8%   { opacity: 1; filter: blur(0px);  transform: translateY(0px); }
+    20%  { opacity: 1; filter: blur(0px);  transform: translateY(0px); }
+    28%  { opacity: 0; filter: blur(12px); transform: translateY(-6px); }
+    100% { opacity: 0; filter: blur(12px); transform: translateY(-6px); }
+}
+
+/* ── BUTTONS ── */
+.acount-firstpage {
+    display: flex; justify-content: center;
+    align-items: center; gap: 20px; margin-top: 30px;
+}
+.demo {
+    border-radius: 50px; width: 180px; height: 55px; font-size: 20px;
+    font-weight: bold; color: #000; background-color: #fff;
+    cursor: pointer; border: 1px solid #ccc; transition: background-color 0.25s;
+}
+.demo:hover { background-color: #ccc; }
+.signup {
+    border-radius: 50px; width: 180px; height: 55px; font-size: 20px;
+    font-weight: bold; background-color: orange; color: white;
+    cursor: pointer; border: none; transition: background-color 0.25s;
+}
+.signup:hover { background-color: rgb(255,198,93); }
+
+/* ══════════════════════
+   EXPANDING BOXES
+══════════════════════ */
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    gap: 14px;
+    margin-top: 60px;
+    padding: 0 60px;
+    height: 420px;
+}
+
+.box {
+    border-radius: 20px;
+    overflow: hidden;
+    cursor: pointer;
+    position: relative;
+    transition: flex 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+    flex: 1;
+    min-width: 70px;
+}
+.box::before {
+    content: '';
+    position: absolute; inset: 0; z-index: 1;
+    border-radius: 20px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, transparent 60%);
+    pointer-events: none;
+}
+
+/* Box 1 expands LEFT (grows to left, so transform-origin right) */
+/* Box 2 expands RIGHT */
+.container:has(#box1:hover) #box1 { flex: 3.5; }
+.container:has(#box1:hover) #box2 { flex: 0.3; }
+.container:has(#box2:hover) #box2 { flex: 3.5; }
+.container:has(#box2:hover) #box1 { flex: 0.3; }
+
+/* collapsed label */
+.box-label {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%) rotate(-90deg);
+    font-family: Arial, sans-serif; font-size: 14px;
+    font-weight: bold; color: rgba(255,255,255,0.45);
+    white-space: nowrap; pointer-events: none;
+    transition: opacity 0.2s;
+}
+.box:hover .box-label { opacity: 0; }
+
+/* content inside box */
+.box-content {
+    opacity: 0;
+    transform: translateX(-10px);
+    transition: opacity 0.35s ease 0.2s, transform 0.35s ease 0.2s;
+    padding: 36px 32px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: white;
+    min-width: 340px;
+}
+.box:hover .box-content { opacity: 1; transform: translateX(0); }
+
+/* ── BOX 1 — AI Chat ── */
+#box1 {
+    background: linear-gradient(135deg, rgba(255,140,0,0.55), rgba(255,100,0,0.4));
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border: 1px solid rgba(255,180,50,0.35);
+    box-shadow: 0 8px 32px rgba(255,120,0,0.25), inset 0 1px 0 rgba(255,255,255,0.2);
+}
+#box1-bg {
+    position: absolute; inset: 0; z-index: 0;
+    background: linear-gradient(135deg, rgba(255,100,0,0.7), rgba(255,180,0,0.5));
+}
+#box1-bg img {
+    width: 100%; height: 100%; object-fit: cover;
+    opacity: 0.25; display: block;
+    transition: opacity 0.4s ease;
+}
+#box1:hover #box1-bg img { opacity: 0.1; }
+#box1 .box-label { color: rgba(255,255,255,0.7); }
+#box1 .box-content { position: relative; z-index: 1; }
+
+.ai-box-title {
+    font-family: Arial, sans-serif; font-size: 22px;
+    font-weight: bold; color: orange; margin-bottom: 6px;
+}
+.ai-box-name {
+    font-size: 13px; color: rgba(255,255,255,0.5);
+    margin-bottom: 18px; font-style: italic;
+}
+.ai-box-desc {
+    font-size: 14px; color: rgba(255,255,255,0.65);
+    margin-bottom: 20px; line-height: 1.6;
+}
+.ai-box-input-row {
+    display: flex; gap: 10px; align-items: center;
+}
+.ai-box-input {
+    flex: 1; height: 42px; border-radius: 50px;
+    border: 1px solid rgba(255,255,255,0.2);
+    background: rgba(255,255,255,0.08);
+    color: white; padding: 0 16px; font-size: 14px; outline: none;
+}
+.ai-box-input::placeholder { color: rgba(255,255,255,0.3); }
+.ai-box-input:focus { border-color: rgba(255,165,0,0.6); }
+.ai-box-send {
+    height: 42px; padding: 0 20px; border-radius: 50px;
+    background: orange; border: none; color: white;
+    font-weight: bold; cursor: pointer; font-size: 14px;
+    white-space: nowrap; transition: background 0.2s;
+}
+.ai-box-send:hover { background: rgb(255,198,93); }
+.ai-response {
+    margin-top: 14px; font-size: 13.5px;
+    color: rgba(255,255,255,0.75); line-height: 1.6;
+    min-height: 44px; font-style: italic;
+}
+
+/* ── BOX 2 — Stats ── */
+#box2 {
+    background: rgba(10, 10, 10, 0.65);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.07);
+}
+#box2-bg {
+    position: absolute; inset: 0; z-index: 0;
+    background: rgba(0,0,0,0.5);
+}
+#box2-bg img {
+    width: 100%; height: 100%; object-fit: cover;
+    opacity: 0.22; display: block;
+    filter: grayscale(30%);
+    transition: opacity 0.4s ease;
+}
+#box2:hover #box2-bg img { opacity: 0.08; }
+#box2 .box-content { position: relative; z-index: 1; }
+#box2 .box-label { color: rgba(255,255,255,0.35); }
+
+.info-box-title {
+    font-family: Arial, sans-serif; font-size: 22px;
+    font-weight: bold; color: #ffffff; margin-bottom: 10px;
+}
+.info-box-desc {
+    font-size: 14px; color: rgba(255,255,255,0.7); line-height: 1.7; margin-bottom: 22px;
+}
+.info-stats { display: flex; gap: 24px; }
+.info-stat { text-align: center; }
+.info-stat-num {
+    font-family: Arial, sans-serif; font-size: 30px;
+    font-weight: bold; color: #fff;
+}
+.info-stat-label { font-size: 11px; color: rgba(255,255,255,0.55); margin-top: 2px; }
+
+/* ══════════════════════
+   MONEY / CAROUSEL
+══════════════════════ */
+.money-section {
+    margin-top: 80px;
+    padding: 0 60px 60px;
+}
+.money-title {
+    font-family: Arial, sans-serif; font-size: 28px;
+    font-weight: 100; text-align: center; margin-bottom: 8px;
+}
+.money-title span { font-weight: bold; color: orange; }
+.money-sub {
+    text-align: center; font-size: 15px;
+    color: #888; margin-bottom: 44px;
+}
+
+.carousel-wrap {
+    overflow-x: auto; padding: 20px 0 36px;
+    scrollbar-width: none; /* Firefox */
+}
+.carousel-wrap::-webkit-scrollbar { display: none; }
+
+.carousel-track {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    width: max-content;
+    padding: 0 40px;
+    cursor: grab;
+    transition: none;
+}
+.carousel-track:active { cursor: grabbing; }
+
+.c-card {
+    border-radius: 18px;
+    overflow: hidden;
+    flex-shrink: 0;
+    position: relative;
+    cursor: pointer;
+    transition:
+        width  0.45s cubic-bezier(0.4,0,0.2,1),
+        height 0.45s cubic-bezier(0.4,0,0.2,1),
+        box-shadow 0.3s ease,
+        transform 0.35s ease;
+    width: 200px;
+    height: 260px;
+    background: #eee;
+}
+.c-card.active {
+    width: 320px;
+    height: 380px;
+    box-shadow: 0 24px 60px rgba(0,0,0,0.22);
+    transform: translateY(-14px);
+    z-index: 2;
+}
+.c-card img {
+    width: 100%; height: 100%;
+    object-fit: cover; display: block;
+    transition: transform 0.4s ease;
+    pointer-events: none;
+}
+.c-card:hover img { transform: scale(1.05); }
+.c-card-label {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    background: linear-gradient(transparent, rgba(0,0,0,0.72));
+    color: white; font-family: Arial, sans-serif;
+    font-size: 13px; font-weight: bold;
+    padding: 32px 14px 14px;
+    opacity: 0; transition: opacity 0.3s ease;
+}
+.c-card.active .c-card-label,
+.c-card:hover .c-card-label { opacity: 1; }
+
+/* dots + arrows */
+.carousel-dots {
+    display: flex; justify-content: center;
+    gap: 8px; margin-top: 16px;
+}
+.c-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: #ccc; cursor: pointer;
+    transition: background 0.3s, width 0.3s, border-radius 0.3s;
+}
+.c-dot.active { background: orange; width: 24px; border-radius: 4px; }
+.carousel-arrows {
+    display: flex; justify-content: center;
+    gap: 12px; margin-top: 14px;
+}
+.c-arrow {
+    width: 40px; height: 40px; border-radius: 50%;
+    background: #fff; border: 1px solid #ddd;
+    font-size: 18px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.2s, color 0.2s;
+}
+.c-arrow:hover { background: orange; border-color: orange; color: white; }
+
+
+
+/* ══════════════════════
+   VIDEO SECTION
+══════════════════════ */
+.video-section {
+    padding: 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #fff;
+}
+.video-label {
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: orange;
+    margin-bottom: 10px;
+}
+.video-title {
+    font-family: Arial, sans-serif;
+    font-size: 32px;
+    font-weight: 900;
+    color: #111;
+    text-align: center;
+    margin-bottom: 8px;
+    letter-spacing: -.02em;
+}
+.video-sub {
+    font-size: 15px;
+    color: #999;
+    text-align: center;
+    margin-bottom: 40px;
+    max-width: 520px;
+    line-height: 1.7;
+}
+.video-frame {
+    width: 100%;
+    max-width: 900px;
+    aspect-ratio: 16/9;
+    background: #f5f5f5;
+    border-radius: 16px;
+    border: 1.5px solid #e0e0e0;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+}
+.video-frame video {
+    width: 100%; height: 100%;
+    object-fit: cover; display: block;
+}
+.play-overlay {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(245,245,245,0.6);
+    transition: background .2s;
+}
+.video-frame:hover .play-overlay { background: rgba(245,245,245,0.4); }
+.play-btn-circle {
+    width: 72px; height: 72px;
+    border-radius: 35px;
+    background: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px; color: #555;
+    transition: border-color .2s, color .2s;
+}
+.video-frame:hover .play-btn-circle { border-color: #aaa; color: #222; }
+
+/* ══════════════════════
+   PRICING SECTION
+══════════════════════ */
+.pricing-section {
+    padding: 80px 60px;
+    background: #fff;
+    font-family: Arial, sans-serif;
+}
+.pricing-header {
+    text-align: center;
+    margin-bottom: 56px;
+}
+.pricing-label {
+    font-size: 13px; font-weight: 700;
+    letter-spacing: .12em; text-transform: uppercase;
+    color: orange; margin-bottom: 10px;
+}
+.pricing-title {
+    font-size: 34px; font-weight: 900;
+    color: #111; letter-spacing: -.025em; margin-bottom: 10px;
+}
+.pricing-sub {
+    font-size: 15px; color: #aaa; line-height: 1.7;
+}
+
+.plans-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    max-width: 960px;
+    margin: 0 auto;
+}
+.plan-card {
+    border: 1.5px solid #eee;
+    border-radius: 20px;
+    padding: 36px 30px;
+    background: #fff;
+    position: relative;
+    transition: transform .2s, box-shadow .2s;
+}
+.plan-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 48px rgba(0,0,0,.08);
+}
+.plan-name {
+    font-size: 13px; font-weight: 700;
+    letter-spacing: .08em; text-transform: uppercase;
+    color: #999; margin-bottom: 12px;
+}
+.plan-price {
+    font-size: 52px; font-weight: 900;
+    color: #111; letter-spacing: -.04em;
+    line-height: 1; margin-bottom: 4px;
+}
+.plan-price sup { font-size: 22px; vertical-align: super; font-weight: 700; }
+.plan-period { font-size: 13px; color: #bbb; margin-bottom: 28px; }
+
+.plan-features { list-style: none; margin-bottom: 32px; }
+.plan-features li {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 14px; color: #555;
+    padding: 9px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+.plan-features li::before {
+    content: '✓';
+    color: orange; font-weight: 900; font-size: 13px; flex-shrink: 0;
+}
+.plan-features li.no::before { content: '✗'; color: #ddd; }
+.plan-features li.no { color: #ccc; }
+
+.btn-plan {
+    width: 100%; padding: 14px; border-radius: 50px;
+    font-size: 15px; font-weight: 800; cursor: pointer;
+    transition: all .2s; border: 2px solid #111;
+    background: #111; color: #fff;
+}
+.btn-plan:hover { background: #333; border-color: #333; }
+
+
+/* ══════════════════════
+   WHY GOMART / FAQ
+══════════════════════ */
+.why-section {
+    padding: 80px 60px;
+    background: #fafafa;
+    font-family: Arial, sans-serif;
+}
+.why-header {
+    text-align: center; margin-bottom: 56px;
+}
+.why-label {
+    font-size: 13px; font-weight: 700;
+    letter-spacing: .12em; text-transform: uppercase;
+    color: orange; margin-bottom: 10px;
+}
+.why-title {
+    font-size: 34px; font-weight: 900;
+    color: #111; letter-spacing: -.025em; margin-bottom: 10px;
+}
+.why-sub { font-size: 15px; color: #aaa; line-height: 1.7; }
+
+.why-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    max-width: 1000px;
+    margin: 0 auto 60px;
+}
+.why-card {
+    background: #fff;
+    border: 1.5px solid #eee;
+    border-radius: 18px;
+    padding: 32px 26px;
+    transition: transform .2s, box-shadow .2s, border-color .2s;
+}
+.why-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 36px rgba(0,0,0,.08);
+    border-color: orange;
+}
+.why-icon {
+    width: 48px; height: 48px; border-radius: 14px;
+    background: rgba(255,165,0,.1); border: 1.5px solid rgba(255,165,0,.2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; color: orange; margin-bottom: 18px;
+}
+.why-card h3 {
+    font-size: 17px; font-weight: 800; color: #111;
+    margin-bottom: 10px; letter-spacing: -.01em;
+}
+.why-card p {
+    font-size: 14px; color: #888; line-height: 1.7;
+}
+
+/* FAQ */
+.faq-wrap {
+    max-width: 720px; margin: 0 auto;
+}
+.faq-title {
+    font-size: 26px; font-weight: 900; color: #111;
+    text-align: center; margin-bottom: 32px; letter-spacing: -.02em;
+}
+.faq-item {
+    border-bottom: 1.5px solid #eee;
+    padding: 20px 0; cursor: pointer;
+}
+.faq-q {
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    font-size: 15px; font-weight: 700; color: #111;
+}
+.faq-icon {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: #f5f5f5; border: 1.5px solid #eee;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; color: #aaa; flex-shrink: 0;
+    transition: background .2s, color .2s, transform .25s;
+}
+.faq-item:hover .faq-icon { background: orange; color: white; border-color: orange; }
+.faq-item.open .faq-icon { background: orange; color: white; border-color: orange; transform: rotate(45deg); }
+.faq-a {
+    font-size: 14px; color: #888; line-height: 1.75;
+    max-height: 0; overflow: hidden;
+    transition: max-height .35s ease, margin-top .3s ease;
+}
+.faq-item.open .faq-a { max-height: 200px; margin-top: 12px; }
+
+
+/* ══════════════════════
+   SCROLL TRANSITIONS
+══════════════════════ */
+.reveal {
+    opacity: 0;
+    transform: translateY(36px);
+    transition: opacity 0.65s cubic-bezier(0.4,0,0.2,1),
+                transform 0.65s cubic-bezier(0.4,0,0.2,1);
+}
+.reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+.reveal-left {
+    opacity: 0;
+    transform: translateX(-40px);
+    transition: opacity 0.65s cubic-bezier(0.4,0,0.2,1),
+                transform 0.65s cubic-bezier(0.4,0,0.2,1);
+}
+.reveal-left.visible { opacity: 1; transform: translateX(0); }
+
+.reveal-right {
+    opacity: 0;
+    transform: translateX(40px);
+    transition: opacity 0.65s cubic-bezier(0.4,0,0.2,1),
+                transform 0.65s cubic-bezier(0.4,0,0.2,1);
+}
+.reveal-right.visible { opacity: 1; transform: translateX(0); }
+
+/* stagger delay helpers */
+.d1 { transition-delay: 0.05s; }
+.d2 { transition-delay: 0.15s; }
+.d3 { transition-delay: 0.25s; }
+.d4 { transition-delay: 0.35s; }
+.d5 { transition-delay: 0.45s; }
+.d6 { transition-delay: 0.55s; }
+
+/* ══════════════════════
+   FOOTER
+══════════════════════ */
+footer {
+    background: #111;
+    color: #aaa;
+    font-family: Arial, sans-serif;
+    padding: 64px 60px 32px;
+}
+.footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 40px;
+    margin-bottom: 48px;
+}
+.footer-brand img {
+    height: 48px;
+    object-fit: contain;
+    margin-bottom: 16px;
+    display: block;
+}
+.footer-brand p {
+    font-size: 14px;
+    line-height: 1.75;
+    color: #666;
+    max-width: 260px;
+}
+.footer-col h4 {
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: #fff;
+    margin-bottom: 18px;
+}
+.footer-col a {
+    display: block;
+    font-size: 14px;
+    color: #666;
+    text-decoration: none;
+    margin-bottom: 11px;
+    transition: color .2s;
+}
+.footer-col a:hover { color: orange; }
+.footer-bottom {
+    border-top: 1px solid #222;
+    padding-top: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+.footer-bottom p { font-size: 13px; color: #555; }
+.footer-socials { display: flex; gap: 12px; }
+.footer-socials a {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: #1e1e1e; border: 1px solid #2a2a2a;
+    display: flex; align-items: center; justify-content: center;
+    color: #666; font-size: 14px; text-decoration: none;
+    transition: background .2s, color .2s, border-color .2s;
+}
+.footer-socials a:hover { background: orange; color: #fff; border-color: orange; }
+
+@media (max-width: 768px) {
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+    footer { padding: 48px 24px 28px; }
+}
+@media (max-width: 480px) {
+    .footer-grid { grid-template-columns: 1fr; }
+}
+
+</style>
+
+<body>
+<header>
+    <img id="logo" src="/images/logo-text.png" alt="Gomart">
+    <div id="droptext">
+        <div class="dropdown">
+            <button class="triger">Gomart</button>
+            <div class="menu">
+                <a href="">Our Story</a>
+                <a href="">Team</a>
+                <a href="">Awards</a>
+            </div>
+        </div>
+        <div class="dropdown">
+            <button class="triger">Features</button>
+            <div class="menu">
+                <a href="">Analytics</a>
+                <a href="">AI Assistant</a>
+            </div>
+        </div>
+        <div class="dropdown">
+            <button class="triger">Pricing</button>
+            <div class="menu">
+                <a href="">Starter</a>
+                <a href="">Growth</a>
+            </div>
+        </div>
+        <div class="dropdown">
+            <button class="triger">Contact us</button>
+            <div class="menu">
+                <a href="">Email</a>
+                <a href="">WhatsApp</a>
+            </div>
+        </div>
+        <button class="Buttontry">Try Gomart</button>
+    </div>
+</header>
+<hr>
+
+<main>
+    <!-- HERO -->
+    <div class="title reveal">
+        <div class="text-changer">
+            <h1 class="intro-text reveal d1">Gomart helps you</h1>
+            <div class="roles-container" style="color:orange">
+                <h1 class="role">Boost Sales</h1>
+                <h1 class="role">Build More</h1>
+                <h1 class="role">Grow Faster</h1>
+                <h1 class="role">Earn Bigger</h1>
+            </div>
+        </div>
+        <h2 id="myh2" class="reveal d2">
+            <span style="font-weight:bold">Gomart</span> empowers your business with
+            <span style="font-weight:bold">AI-driven sales</span> tools,
+            <span style="font-weight:bold"><br>real-time analytics</span>, and
+            <span style="font-weight:bold">seamless integrations</span><br>
+            <span style="font-weight:bold">all in one beautiful dashboard</span>
+        </h2>
+        <div class="acount-firstpage reveal d3">
+            <button class="signup">Sign up</button>
+            <button class="demo">Book a demo</button>
+        </div>
+        <br>
+    </div>
+
+    <!-- BOXES -->
+    <div class="container reveal">
+
+        <!-- BOX 1: hover → expand left, show AI chat -->
+        <div class="box" id="box1">
+            <div id="box1-bg"><img src="/images/Black_Handwritten_Organic_Creative_Freelancer_Artist_Logo__5_-removebg-preview.png" alt=""></div>
+            <div class="box-label">Gomart AI</div>
+            <div class="box-content">
+                <div class="ai-box-title"><i class="fa-solid fa-robot" style="margin-right:8px;font-size:18px;"></i>Meet Gumbo</div>
+                <div class="ai-box-name">Your personal AI sales assistant</div>
+                <div class="ai-box-desc">
+                    Ask me anything — from boosting sales and managing stock,<br>
+                    to running promotions and reading your analytics.
+                </div>
+                <div class="ai-box-input-row">
+                    <input class="ai-box-input" id="gumboInput"
+                        placeholder="Ask Gumbo anything…"
+                        onkeydown="if(event.key==='Enter') sendGumbo()" onfocus="checkLoginHint()" />
+                    <button class="ai-box-send" onclick="sendGumbo()">Send</button>
+                </div>
+                <div class="ai-response" id="gumboResponse">
+                    Hi! I'm Gumbo — How can I help your business today?
+                </div>
+            </div>
+        </div>
+
+        <!-- BOX 2: hover → expand right, show stats -->
+        <div class="box" id="box2">
+            <div id="box2-bg"><img src="/images/Black_Handwritten_Organic_Creative_Freelancer_Artist_Logo__3_-removebg-preview.png" alt=""></div>
+            <div class="box-label">Why Gomart</div>
+            <div class="box-content">
+                <div class="info-box-title"> Grow with data</div>
+                <div class="info-box-desc">
+                    Gomart gives you real-time insights, automated reports,
+                    and AI recommendations — so every decision is backed by
+                    data, not guesswork. Join thousands of sellers already growing.
+                </div>
+                <div class="info-stats">
+                    <div class="info-stat">
+                        <div class="info-stat-num">12K+</div>
+                        <div class="info-stat-label">Active Merchants</div>
+                    </div>
+                    <div class="info-stat">
+                        <div class="info-stat-num">3.2x</div>
+                        <div class="info-stat-label">Avg. Sales Growth</div>
+                    </div>
+                    <div class="info-stat">
+                        <div class="info-stat-num">4.9★</div>
+                        <div class="info-stat-label">User Rating</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <hr style="margin-top:60px">
+
+    <!-- CAROUSEL / MONEY SECTION -->
+    <div class="money-section reveal">
+        <h2 class="money-title reveal">See what <span>Gomart AI</span> can do for your sales</h2>
+        <p class="money-sub reveal d1">Real results from real merchants — powered by AI insights, automation, and smart integrations.</p>
+
+        <div class="carousel-wrap" id="carouselWrap">
+            <div class="carousel-track" id="carouselTrack">
+                <div class="c-card active" onclick="setActive(0)">
+                    <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&q=80" alt="Sales">
+                    <div class="c-card-label"> Real-time Sales Dashboard</div>
+                </div>
+                <div class="c-card" onclick="setActive(1)">
+                    <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&q=80" alt="Analytics">
+                    <div class="c-card-label"> AI-Powered Analytics</div>
+                </div>
+                <div class="c-card" onclick="setActive(2)">
+                    <img src="https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=600&q=80" alt="Inventory">
+                    <div class="c-card-label"> Smart Inventory Alerts</div>
+                </div>
+                <div class="c-card" onclick="setActive(3)">
+                    <img src="https://images.unsplash.com/photo-1553729459-efe14ef6055d?w=600&q=80" alt="Revenue">
+                    <div class="c-card-label"> Revenue Optimization</div>
+                </div>
+                <div class="c-card" onclick="setActive(4)">
+                    <img src="https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=600&q=80" alt="Chat">
+                    <div class="c-card-label"> Auto Reply & CRM</div>
+                </div>
+                <div class="c-card" onclick="setActive(5)">
+                    <img src="https://images.unsplash.com/photo-1614028674026-a65e31bfd27c?w=600&q=80" alt="Integrations">
+                    <div class="c-card-label"> Marketplace Integrations</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="carousel-dots" id="carouselDots"></div>
+        <div class="carousel-arrows">
+            <button class="c-arrow" onclick="moveCarousel(-1)">←</button>
+            <button class="c-arrow" onclick="moveCarousel(1)">→</button>
+        </div>
+    </div>
+
+
+
+
+    <!-- ══ VIDEO SECTION ══ -->
+    <div class="video-section reveal">
+        <div class="video-label reveal">See It Live</div>
+        <h2 class="video-title reveal d1">Watch Gomart in action</h2>
+        <p class="video-sub reveal d2">See how Gomart AI turns your store data into real growth — in under 3 minutes.</p>
+        <div class="video-frame reveal d3" onclick="this.querySelector('video').play(); this.querySelector('.play-overlay').style.display='none'">
+            <video src="#" preload="none"></video>
+            <div class="play-overlay">
+                <div class="play-btn-circle"><i class="fa-solid fa-play" style="font-size:20px;margin-left:3px;"></i></div>
+            </div>
+        </div>
+    </div>
+
+    <hr style="border:none;border-top:1.5px solid #f0f0f0;margin:0 60px">
+
+    <!-- ══ PRICING ══ -->
+    <div class="pricing-section">
+        <div class="pricing-header">
+            <div class="pricing-label reveal">Pricing</div>
+            <h2 class="pricing-title reveal d1">Simple, transparent pricing</h2>
+            <p class="pricing-sub reveal d2">Start free. Scale as you grow. No hidden fees.</p>
+        </div>
+        <div class="plans-grid reveal">
+
+            <!-- Starter -->
+            <div class="plan-card reveal d1">
+                <div class="plan-name">Starter</div>
+                <div class="plan-price"><sup>$</sup>49</div>
+                <div class="plan-period">per month</div>
+                <ul class="plan-features">
+                    <li>Up to 500 orders / month</li>
+                    <li>Basic analytics dashboard</li>
+                    <li>2 marketplace integrations</li>
+                    <li>Email support</li>
+                    <li class="no">AI Sales Assistant</li>
+                    <li class="no">Auto Reply</li>
+                </ul>
+                <button class="btn-plan" onclick="window.location.href='signup.html'">Get Started</button>
+            </div>
+
+            <!-- Growth -->
+            <div class="plan-card reveal d2">
+                <div class="plan-name">Growth</div>
+                <div class="plan-price"><sup>$</sup>149</div>
+                <div class="plan-period">per month</div>
+                <ul class="plan-features">
+                    <li>Up to 5,000 orders / month</li>
+                    <li>Advanced analytics + reports</li>
+                    <li>10 marketplace integrations</li>
+                    <li>Priority support</li>
+                    <li>AI Sales Assistant (Gumbo)</li>
+                    <li>Auto Reply & CRM</li>
+                </ul>
+                <button class="btn-plan" onclick="window.location.href='signup.html'">Get Started</button>
+            </div>
+
+            <!-- Enterprise -->
+            <div class="plan-card reveal d3">
+                <div class="plan-name">Enterprise</div>
+                <div class="plan-price"><sup>$</sup>399</div>
+                <div class="plan-period">per month</div>
+                <ul class="plan-features">
+                    <li>Unlimited orders</li>
+                    <li>Custom reports & exports</li>
+                    <li>Unlimited integrations</li>
+                    <li>Dedicated account manager</li>
+                    <li>AI Sales Assistant (Gumbo)</li>
+                    <li>White-label option</li>
+                </ul>
+                <button class="btn-plan" onclick="window.location.href='signup.html'">Get Started</button>
+            </div>
+
+        </div>
+    </div>
+
+    <hr style="border:none;border-top:1.5px solid #f0f0f0;margin:0 60px">
+
+    <!-- ══ WHY GOMART ══ -->
+    <div class="why-section">
+        <div class="why-header">
+            <div class="why-label reveal">Why Gomart</div>
+            <h2 class="why-title reveal d1">Everything you need to sell smarter</h2>
+            <p class="why-sub reveal d2">Built for Indonesian sellers. Trusted by 12,000+ merchants.</p>
+        </div>
+
+        <div class="why-grid">
+            <div class="why-card reveal d1">
+                <div class="why-icon"><i class="fa-solid fa-chart-line"></i></div>
+                <h3>Real-time Analytics</h3>
+                <p>See your sales, traffic, and conversions live. No more waiting for reports — act on data instantly.</p>
+            </div>
+            <div class="why-card reveal d2">
+                <div class="why-icon"><i class="fa-solid fa-robot"></i></div>
+                <h3>AI Sales Assistant</h3>
+                <p>Gumbo — your AI partner — answers customer queries, suggests promotions, and forecasts your next bestseller.</p>
+            </div>
+            <div class="why-card reveal d3">
+                <div class="why-icon"><i class="fa-solid fa-plug"></i></div>
+                <h3>One-Click Integrations</h3>
+                <p>Connect Shopee, Tokopedia, Lazada, TikTok Shop and 20+ more platforms in seconds.</p>
+            </div>
+            <div class="why-card reveal d4">
+                <div class="why-icon"><i class="fa-solid fa-comments"></i></div>
+                <h3>Auto Reply & CRM</h3>
+                <p>Never miss a customer message. Gomart auto-replies on all platforms 24/7 in natural language.</p>
+            </div>
+            <div class="why-card reveal d5">
+                <div class="why-icon"><i class="fa-solid fa-boxes-stacked"></i></div>
+                <h3>Smart Inventory</h3>
+                <p>Get alerts before stock runs out. Set auto-reorder points and let Gomart handle the rest.</p>
+            </div>
+            <div class="why-card reveal d6">
+                <div class="why-icon"><i class="fa-solid fa-shield-halved"></i></div>
+                <h3>Bank-Grade Security</h3>
+                <p>AES-256 encryption, TLS 1.3, and SOC 2 Type II. Your business data is always protected.</p>
+            </div>
+        </div>
+
+        <!-- FAQ -->
+        <div class="faq-wrap">
+            <h3 class="faq-title">Frequently asked questions</h3>
+
+            <div class="faq-item reveal d1" onclick="toggleFaq(this)">
+                <div class="faq-q">Is there a free trial? <div class="faq-icon">+</div></div>
+                <div class="faq-a">Yes! All plans include a 14-day free trial with no credit card required. You can cancel anytime.</div>
+            </div>
+            <div class="faq-item reveal d2" onclick="toggleFaq(this)">
+                <div class="faq-q">Which marketplaces does Gomart connect to? <div class="faq-icon">+</div></div>
+                <div class="faq-a">Gomart integrates with Shopee, Tokopedia, Lazada, TikTok Shop, WooCommerce, Shopify, and 15+ more platforms.</div>
+            </div>
+            <div class="faq-item reveal d3" onclick="toggleFaq(this)">
+                <div class="faq-q">How does the AI assistant work? <div class="faq-icon">+</div></div>
+                <div class="faq-a">Gumbo is trained on e-commerce data and connected to your store. It reads your sales history, inventory, and customer data to give personalized advice.</div>
+            </div>
+            <div class="faq-item reveal d4" onclick="toggleFaq(this)">
+                <div class="faq-q">Can I upgrade or downgrade my plan? <div class="faq-icon">+</div></div>
+                <div class="faq-a">Absolutely. You can change your plan at any time from your dashboard. Changes take effect at the start of your next billing cycle.</div>
+            </div>
+            <div class="faq-item reveal d5" onclick="toggleFaq(this)">
+                <div class="faq-q">Is my business data safe? <div class="faq-icon">+</div></div>
+                <div class="faq-a">Yes. We use AES-256 encryption at rest and TLS 1.3 in transit. Gomart is SOC 2 Type II certified and never sells your data to third parties.</div>
+            </div>
+            <div class="faq-item reveal d6" onclick="toggleFaq(this)">
+                <div class="faq-q">How long does setup take? <div class="faq-icon">+</div></div>
+                <div class="faq-a">Most sellers are fully connected and running within 5 minutes. Just sign up, connect your store, and Gomart starts analyzing your data immediately.</div>
+            </div>
+        </div>
+    </div>
+
+</main>
+<footer>
+    <div class="footer-grid">
+        <div class="footer-brand">
+            <img src="/images/logo-text.png" alt="Gomart" onerror="this.style.display='none'">
+            <p>Gomart helps thousands of sellers grow their business with AI-powered tools — built for Indonesia.</p>
+        </div>
+        <div class="footer-col">
+            <h4>Product</h4>
+            <a href="#">Features</a>
+            <a href="#">Pricing</a>
+            <a href="#">Integrations</a>
+            <a href="#">Changelog</a>
+        </div>
+        <div class="footer-col">
+            <h4>Company</h4>
+            <a href="#">About Us</a>
+            <a href="#">Blog</a>
+            <a href="#">Careers</a>
+            <a href="#">Contact</a>
+        </div>
+        <div class="footer-col">
+            <h4>Support</h4>
+            <a href="#">Help Center</a>
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Service</a>
+            <a href="#">Status</a>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>&copy; 2026 Gomart. All rights reserved. Made with love in Indonesia.</p>
+        <div class="footer-socials">
+            <a href="#" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
+            <a href="#" title="Twitter / X"><i class="fa-brands fa-x-twitter"></i></a>
+            <a href="#" title="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+            <a href="#" title="TikTok"><i class="fa-brands fa-tiktok"></i></a>
+        </div>
+    </div>
+</footer>
+
+<script>
+/* ══ GUMBO AI ══ */
+function checkLoginHint() {
+    if (!isLoggedIn()) {
+        const resp = document.getElementById('gumboResponse');
+        resp.innerHTML = 'Please <a href="Signin.html" style="color:orange;font-weight:bold;text-decoration:underline;">sign in</a> to chat with Gumbo.';
+    }
+}
+
+/* Simulate login state — change to true after user logs in */
+/* In real app: check localStorage/session cookie */
+function isLoggedIn() {
+    return localStorage.getItem('gomart_user') !== null;
+}
+
+async function sendGumbo() {
+    const input = document.getElementById('gumboInput');
+    const resp  = document.getElementById('gumboResponse');
+    const msg   = input.value.trim();
+    if (!msg) return;
+
+    /* ── LOGIN CHECK ── */
+    if (!isLoggedIn()) {
+        resp.innerHTML = 'You need an account to chat with Gumbo. <a href="Signin.html" style="color:orange;font-weight:bold;text-decoration:underline;">Sign in here →</a>';
+        input.value = '';
+        return;
+    }
+
+    input.value = '';
+    resp.textContent = 'Gumbo is thinking…';
+    try {
+        const res = await fetch('https://api.anthropic.com/v1/messages', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                model: 'claude-sonnet-4-20250514',
+                max_tokens: 1000,
+                system: 'You are Gumbo, a friendly AI sales assistant for Gomart — an e-commerce platform for Indonesian sellers. Help with sales strategy, inventory, promotions, and growth. Be warm, concise, max 60 words.',
+                messages: [{ role: 'user', content: msg }]
+            })
+        });
+        const data = await res.json();
+        resp.textContent = data.content?.find(c => c.type === 'text')?.text || 'Sorry, try again!';
+    } catch(e) {
+        resp.textContent = "Can't connect right now  Try again in a moment!";
+    }
+}
+
+/* ══ CAROUSEL ══ */
+const cards   = Array.from(document.querySelectorAll('.c-card'));
+const dotsEl  = document.getElementById('carouselDots');
+const wrap    = document.getElementById('carouselWrap');
+let activeIdx = 0;
+
+/* build dots */
+cards.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'c-dot' + (i === 0 ? ' active' : '');
+    d.onclick = () => setActive(i);
+    dotsEl.appendChild(d);
+});
+
+function setActive(idx) {
+    cards[activeIdx].classList.remove('active');
+    dotsEl.children[activeIdx].classList.remove('active');
+    activeIdx = idx;
+    cards[activeIdx].classList.add('active');
+    dotsEl.children[activeIdx].classList.add('active');
+    /* scroll active into center */
+    cards[activeIdx].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+}
+
+function moveCarousel(dir) {
+    setActive((activeIdx + dir + cards.length) % cards.length);
+}
+
+/* drag scroll */
+let drag = false, startX = 0, scrollStart = 0;
+const track = document.getElementById('carouselTrack');
+track.addEventListener('mousedown', e => {
+    drag = true; startX = e.pageX; scrollStart = wrap.scrollLeft;
+    track.style.userSelect = 'none';
+});
+document.addEventListener('mouseup', () => { drag = false; track.style.userSelect = ''; });
+document.addEventListener('mousemove', e => {
+    if (!drag) return;
+    wrap.scrollLeft = scrollStart - (e.pageX - startX);
+});
+
+function toggleFaq(item) {
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+    if (!isOpen) item.classList.add('open');
+}
+
+/* ══ SCROLL REVEAL OBSERVER ══ */
+const revealEls = document.querySelectorAll('.reveal, .reveal-left, .reveal-right');
+const revealObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+        if (e.isIntersecting) {
+            e.target.classList.add('visible');
+            revealObs.unobserve(e.target);
+        }
+    });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+revealEls.forEach(el => revealObs.observe(el));
+</script>
+</body>
+</html>
