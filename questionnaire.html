@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kuesioner — Gomart</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+    --orange: #f9a825;
+    --deep: #e65c00;
+    --bg: #fff8f0;
+    --white: #ffffff;
+    --text: #111111;
+    --muted: #999;
+    --border: #eee;
+    --radius: 14px;
+}
+
+body {
+    font-family: 'Plus Jakarta Sans', Arial, sans-serif;
+    min-height: 100vh;
+    background: var(--bg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px 80px;
+}
+
+/* TOP BAR */
+.topbar {
+    width: 100%;
+    max-width: 700px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 40px;
+}
+.topbar-logo img { height: 60px; object-fit: contain; }
+.topbar-logo span { font-size: 22px; font-weight: 900; color: var(--deep); letter-spacing: -.03em; }
+.skip-link { font-size: 13px; color: var(--muted); text-decoration: none; font-weight: 600; transition: color .2s; }
+.skip-link:hover { color: var(--deep); }
+
+/* PROGRESS */
+.progress-wrap {
+    width: 100%;
+    max-width: 700px;
+    margin-bottom: 36px;
+}
+.progress-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+.progress-meta span { font-size: 12px; font-weight: 700; color: var(--muted); letter-spacing: .05em; text-transform: uppercase; }
+.progress-meta strong { font-size: 12px; font-weight: 800; color: var(--deep); }
+.progress-track {
+    height: 5px;
+    background: #f0e8df;
+    border-radius: 10px;
+    overflow: hidden;
+}
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--orange), var(--deep));
+    border-radius: 10px;
+    transition: width .5s cubic-bezier(.4,0,.2,1);
+    width: 0%;
+}
+
+/* CARD */
+.card {
+    width: 100%;
+    max-width: 700px;
+    background: var(--white);
+    border-radius: 24px;
+    padding: 44px 48px;
+    box-shadow: 0 8px 40px rgba(230,92,0,.08), 0 2px 12px rgba(0,0,0,.04);
+    animation: slideUp .45s cubic-bezier(.4,0,.2,1) both;
+}
+@keyframes slideUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+
+/* STEP INDICATOR (small dots) */
+.dot-row {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 28px;
+}
+.dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: #f0e8df;
+    transition: all .3s;
+}
+.dot.active { background: var(--orange); width: 24px; border-radius: 4px; }
+.dot.done   { background: var(--deep); }
+
+/* QUESTION HEADING */
+.q-label { font-size: 11px; font-weight: 800; color: var(--orange); letter-spacing: .1em; text-transform: uppercase; margin-bottom: 8px; }
+.q-title  { font-size: 26px; font-weight: 900; color: var(--text); line-height: 1.25; margin-bottom: 8px; letter-spacing: -.03em; }
+.q-sub    { font-size: 14px; color: var(--muted); line-height: 1.6; margin-bottom: 28px; }
+
+/* OPTIONS — PILL STYLE (single-line) */
+.opts-pills { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 32px; }
+.opt-pill {
+    padding: 10px 18px;
+    border: 1.5px solid var(--border);
+    border-radius: 50px;
+    background: #fafafa;
+    font-size: 13.5px;
+    font-weight: 700;
+    color: #555;
+    cursor: pointer;
+    transition: all .2s;
+    user-select: none;
+}
+.opt-pill:hover { border-color: var(--orange); color: var(--deep); background: #fff; }
+.opt-pill.sel { border-color: var(--deep); background: linear-gradient(135deg, rgba(249,168,37,.12), rgba(230,92,0,.08)); color: var(--deep); box-shadow: 0 0 0 3px rgba(249,168,37,.2); }
+
+/* OPTIONS — CARD STYLE (icon + desc) */
+.opts-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 32px; }
+.opt-card {
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px 16px 14px;
+    background: #fafafa;
+    cursor: pointer;
+    transition: all .2s;
+    user-select: none;
+}
+.opt-card:hover { border-color: var(--orange); background: #fff; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(249,168,37,.12); }
+.opt-card.sel { border-color: var(--deep); background: linear-gradient(135deg,rgba(249,168,37,.1),rgba(230,92,0,.06)); box-shadow: 0 0 0 3px rgba(249,168,37,.2); }
+.opt-card-icon { font-size: 22px; margin-bottom: 8px; }
+.opt-card-title { font-size: 13px; font-weight: 800; color: var(--text); margin-bottom: 3px; }
+.opt-card-desc  { font-size: 11.5px; color: var(--muted); line-height: 1.5; }
+
+/* OPTIONS — YES/NO BIG */
+.opts-yn { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 32px; }
+.opt-yn {
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 22px;
+    background: #fafafa;
+    text-align: center;
+    cursor: pointer;
+    transition: all .2s;
+    user-select: none;
+}
+.opt-yn:hover { border-color: var(--orange); background: #fff; transform: translateY(-2px); box-shadow: 0 6px 18px rgba(249,168,37,.15); }
+.opt-yn.sel { border-color: var(--deep); background: linear-gradient(135deg,rgba(249,168,37,.1),rgba(230,92,0,.06)); box-shadow: 0 0 0 3px rgba(249,168,37,.2); }
+.opt-yn-icon { font-size: 28px; margin-bottom: 8px; }
+.opt-yn-label { font-size: 15px; font-weight: 800; color: var(--text); }
+
+/* ACTIONS */
+.actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.btn-next {
+    flex: 1;
+    padding: 14px;
+    border: none;
+    border-radius: 14px;
+    background: linear-gradient(135deg, var(--orange), var(--deep));
+    color: #fff;
+    font-size: 15px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: opacity .2s, transform .15s, box-shadow .2s;
+    box-shadow: 0 4px 18px rgba(249,168,37,.35);
+    font-family: 'Plus Jakarta Sans', Arial, sans-serif;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.btn-next:hover { opacity: .92; transform: translateY(-2px); }
+.btn-next:disabled { opacity: .45; cursor: not-allowed; transform: none; }
+.btn-back {
+    padding: 14px 20px;
+    border: 1.5px solid var(--border);
+    border-radius: 14px;
+    background: #fafafa;
+    color: var(--muted);
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all .2s;
+    font-family: 'Plus Jakarta Sans', Arial, sans-serif;
+}
+.btn-back:hover { background: #f0f0f0; color: #555; }
+
+/* SUCCESS */
+.success-screen {
+    display: flex; flex-direction: column; align-items: center; text-align: center;
+    padding: 20px 0;
+}
+.success-anim {
+    width: 80px; height: 80px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--orange), var(--deep));
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 24px;
+    box-shadow: 0 10px 30px rgba(249,168,37,.45);
+    animation: popIn .6s cubic-bezier(.34,1.56,.64,1) both;
+}
+.success-anim svg { width: 36px; height: 36px; }
+@keyframes popIn { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.success-screen h2 { font-size: 28px; font-weight: 900; color: var(--text); margin-bottom: 10px; letter-spacing: -.03em; }
+.success-screen p  { font-size: 15px; color: var(--muted); line-height: 1.7; max-width: 320px; margin-bottom: 28px; }
+.btn-go {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 15px 36px; border-radius: 50px;
+    background: linear-gradient(135deg, var(--orange), var(--deep));
+    color: #fff; font-size: 15px; font-weight: 800;
+    text-decoration: none; transition: opacity .2s, transform .15s;
+    box-shadow: 0 6px 20px rgba(249,168,37,.4);
+    font-family: 'Plus Jakarta Sans', Arial, sans-serif;
+}
+.btn-go:hover { opacity: .9; transform: translateY(-2px); }
+
+@media (max-width: 600px) {
+    .card { padding: 28px 22px; }
+    .opts-cards { grid-template-columns: 1fr; }
+    .opts-yn { grid-template-columns: 1fr 1fr; }
+    .q-title { font-size: 21px; }
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+    <div class="topbar-logo">
+        <img src="/images/logo-text.png" alt="Gomart" onerror="this.style.display='none'">
+        <span style="display:none" id="fallbackLogo">Gomart</span>
+    </div>
+    <a class="skip-link" href="index.html">Lewati →</a>
+</div>
+
+<div class="progress-wrap">
+    <div class="progress-meta">
+        <span id="stepLabel">Pertanyaan 1 dari 6</span>
+        <strong id="stepPct">17%</strong>
+    </div>
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+</div>
+
+<div class="card" id="mainCard">
+    <!-- injected by JS -->
+</div>
+
+<script>
+const STEPS = [
+    {
+        type: 'pills',
+        label: 'Tujuan Utama',
+        title: 'Apa tujuan utama kamu?',
+        sub: 'Beritahu kami apa yang ingin kamu capai dengan Gomart, dan kami akan menyiapkan kamu menuju kesuksesan.',
+        opts: [
+            { label: 'Buat pesanan massal' },
+            { label: 'Mulai bisnis baru' },
+            { label: 'Buat merch untuk bisnis' },
+            { label: 'Jual produk' },
+            { label: 'Pesan produk untuk diri sendiri / keluarga' },
+            { label: 'Saya hanya ingin menjelajahi' },
+        ]
+    },
+    {
+        type: 'yn',
+        label: 'Pengalaman',
+        title: 'Apakah kamu punya pengalaman berjualan online?',
+        sub: 'Kami akan memberikan panduan dan dukungan yang disesuaikan untuk membantumu mencapai tujuanmu.',
+        opts: [
+            { icon: '', label: 'Ya' },
+            { icon: '', label: 'Belum' },
+        ]
+    },
+    {
+        type: 'pills',
+        label: 'Waktu & Komitmen',
+        title: 'Berapa banyak waktu yang akan kamu dedikasikan untuk toko Gomart ini?',
+        sub: 'Apakah kamu baru menjelajahi atau sudah serius, kami akan mendukungmu sesuai kecepatan yang cocok untukmu.',
+        opts: [
+            { label: 'Ini akan menjadi fokus penuh waktu saya' },
+            { label: 'Ini untuk perusahaan tempat saya bekerja' },
+            { label: 'Ini bisnis sampingan paruh waktu' },
+            { label: 'Belum yakin' },
+        ]
+    },
+    {
+        type: 'cards',
+        label: 'Latar Belakang',
+        title: 'Saya bergabung ke Gomart sebagai...',
+        sub: 'Pilih opsi yang paling menggambarkan latar belakangmu.',
+        opts: [
+            { icon: '', title: 'Agensi', desc: 'Saya mendesain untuk klien lain.' },
+            { icon: '', title: 'NGO', desc: 'Saya mewakili lembaga nirlaba atau amal.' },
+            { icon: '', title: 'Wirausaha Mandiri', desc: 'Saya menghasilkan uang dari berjualan online.' },
+            { icon: '', title: 'Seniman / Desainer', desc: 'Saya mendesain dan/atau membuat karya/produk sendiri.' },
+            { icon: '', title: 'Bisnis', desc: 'Saya mewakili perusahaan yang menjual produk.' },
+            { icon: '', title: 'Lainnya', desc: 'Ceritakan bagaimana kamu mendeskripsikan dirimu.' },
+        ]
+    },
+    {
+        type: 'yn',
+        label: 'Platform Penjualan',
+        title: 'Apakah kamu sudah tahu platform penjualan yang akan digunakan?',
+        sub: 'Kami dapat membantumu terhubung dengan cepat atau merekomendasikan platform seperti Shopee atau Tokopedia jika kamu belum yakin.',
+        opts: [
+            { icon: '', label: 'Ya, saya sudah tahu platform yang mau saya gunakan' },
+            { icon: '', label: 'Belum, saya tidak tahu harus berjualan di mana' },
+        ]
+    },
+    {
+        type: 'pills',
+        label: 'Sumber Info',
+        title: 'Pertanyaan terakhir — Dari mana kamu mendengar tentang Gomart?',
+        sub: 'Bantu kami memahami bagaimana kamu menemukan kami.',
+        opts: [
+            { label: 'Teman / Keluarga' },
+            { label: 'YouTube' },
+            { label: 'Pencarian Google' },
+            { label: 'Facebook / Instagram' },
+            { label: 'TikTok' },
+            { label: 'AI Tools' },
+            { label: 'Shopee / Tokopedia' },
+            { label: 'Lainnya' },
+        ]
+    },
+];
+
+let current = 0;
+let answers = Array(STEPS.length).fill(null);
+
+function updateProgress() {
+    const pct = Math.round(((current) / STEPS.length) * 100);
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('stepLabel').textContent = current < STEPS.length
+        ? `Pertanyaan ${current + 1} dari ${STEPS.length}`
+        : 'Selesai!';
+    document.getElementById('stepPct').textContent = pct + '%';
+}
+
+function dots() {
+    let html = '';
+    for (let i = 0; i < STEPS.length; i++) {
+        let cls = 'dot';
+        if (i < current) cls += ' done';
+        else if (i === current) cls += ' active';
+        html += `<div class="${cls}"></div>`;
+    }
+    return `<div class="dot-row">${html}</div>`;
+}
+
+function renderStep() {
+    if (current >= STEPS.length) { renderSuccess(); return; }
+    const s = STEPS[current];
+    const sel = answers[current];
+
+    let optsHtml = '';
+    if (s.type === 'pills') {
+        optsHtml = `<div class="opts-pills">` +
+            s.opts.map((o, i) =>
+                `<div class="opt-pill${sel === i ? ' sel' : ''}" onclick="pick(${i})">${o.label}</div>`
+            ).join('') +
+            `</div>`;
+    } else if (s.type === 'yn') {
+        optsHtml = `<div class="opts-yn">` +
+            s.opts.map((o, i) =>
+                `<div class="opt-yn${sel === i ? ' sel' : ''}" onclick="pick(${i})">
+                    <div class="opt-yn-icon">${o.icon}</div>
+                    <div class="opt-yn-label">${o.label}</div>
+                 </div>`
+            ).join('') +
+            `</div>`;
+    } else if (s.type === 'cards') {
+        optsHtml = `<div class="opts-cards">` +
+            s.opts.map((o, i) =>
+                `<div class="opt-card${sel === i ? ' sel' : ''}" onclick="pick(${i})">
+                    <div class="opt-card-icon">${o.icon}</div>
+                    <div class="opt-card-title">${o.title}</div>
+                    <div class="opt-card-desc">${o.desc}</div>
+                 </div>`
+            ).join('') +
+            `</div>`;
+    }
+
+    const backBtn = current > 0
+        ? `<button class="btn-back" onclick="goBack()">← Kembali</button>`
+        : '';
+
+    document.getElementById('mainCard').innerHTML = `
+        ${dots()}
+        <div class="q-label">Pertanyaan ${current + 1}</div>
+        <h2 class="q-title">${s.title}</h2>
+        <p class="q-sub">${s.sub}</p>
+        ${optsHtml}
+        <div class="actions">
+            ${backBtn}
+            <button class="btn-next" id="btnNext" onclick="goNext()" ${sel === null ? 'disabled' : ''}>
+                <span>${current === STEPS.length - 1 ? 'Selesai' : 'Lanjutkan'}</span>
+                ${current < STEPS.length - 1 ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>' : ''}
+            </button>
+        </div>
+    `;
+    updateProgress();
+    // Re-animate card
+    const card = document.getElementById('mainCard');
+    card.style.animation = 'none';
+    requestAnimationFrame(() => { card.style.animation = 'slideUp .45s cubic-bezier(.4,0,.2,1) both'; });
+}
+
+function pick(i) {
+    answers[current] = i;
+    renderStep();
+}
+
+function goNext() {
+    if (answers[current] === null) return;
+    current++;
+    renderStep();
+}
+
+function goBack() {
+    if (current > 0) { current--; renderStep(); }
+}
+
+function renderSuccess() {
+    document.getElementById('progressFill').style.width = '100%';
+    document.getElementById('stepLabel').textContent = 'Selesai!';
+    document.getElementById('stepPct').textContent = '100%';
+    document.getElementById('mainCard').innerHTML = `
+        <div class="success-screen">
+            <div class="success-anim">
+                <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"/>
+                </svg>
+            </div>
+            <h2>Kamu sudah siap! </h2>
+            <p>Terima kasih sudah berbagi. Kami telah menyiapkan Gomart khusus untukmu. Yuk mulai kembangkan bisnismu!</p>
+            <a class="btn-go" href="app.html">Buka Dashboard →</a>
+        </div>
+    `;
+}
+
+// Init
+renderStep();
+
+// Fallback logo text
+document.querySelector('.topbar-logo img').addEventListener('error', function() {
+    this.style.display = 'none';
+    document.getElementById('fallbackLogo').style.display = 'inline';
+});
+</script>
+</body>
+</html>
