@@ -7,1049 +7,854 @@
     <title>Gomart</title>
 </head>
 <style>
-* { box-sizing: border-box; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: Arial, Helvetica, sans-serif; color: #111; background: #fff; }
 
+/* ── HEADER ── */
 header {
-    padding-left: 30px;
-    padding-right: 30px;
+    padding: 0 48px;
+    height: 64px;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    position: sticky;
+    top: 0;
+    background: rgba(255,255,255,.96);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid #f0f0f0;
+    z-index: 500;
 }
-#logo { width: 130px; height: 60px; object-fit: cover; }
+#logo { height: 80px; width: auto; object-fit: contain; }
+#droptext { display: flex; align-items: center; gap: 2px; }
 .dropdown { position: relative; display: inline-block; }
-.triger {
-    background-color: white; border: none; font-size: 16px;
-    padding: 20px 10px; cursor: pointer; transition: background-color 0.25s;
-}
-.triger:hover { background-color: #ccc; }
-.Buttontry {
-    padding: 10px; width: 120px; border-radius: 20px;
-    color: white; border: 1px solid rgb(255,181,44);
-    background-color: orange; cursor: pointer; transition: background-color 0.25s;
-}
-.Buttontry:hover { background-color: rgb(255,198,93); }
-.menu {
-    display: none; position: absolute; top: 100%; left: 0;
-    background: #fff; border: 1px solid #ccc; border-radius: 8px;
-    min-width: 160px; z-index: 100; text-align: left;
-}
-.menu a { display: block; padding: 10px 16px; text-decoration: none; color: #000; }
-.menu a:hover { background: #f5f5f5; }
+.triger { background: none; border: none; font-size: 13.5px; font-weight: 500; padding: 7px 13px; cursor: pointer; color: #666; border-radius: 7px; transition: background .15s, color .15s; }
+.triger:hover { background: #f5f5f5; color: #111; }
+.Buttontry { padding: 9px 20px; border-radius: 50px; color: white; border: none; background: orange; cursor: pointer; font-size: 13.5px; font-weight: 700; transition: background .2s, transform .15s; margin-left: 4px; }
+.Buttontry:hover { background: #ffb83f; transform: translateY(-1px); }
+.menu { display: none; position: absolute; top: calc(100% + 8px); left: 0; background: #fff; border: 1px solid #eee; border-radius: 12px; min-width: 155px; z-index: 600; box-shadow: 0 8px 24px rgba(0,0,0,.07); }
+.menu a { display: block; padding: 9px 15px; text-decoration: none; color: #444; font-size: 13.5px; border-radius: 8px; margin: 2px 4px; transition: background .15s, color .15s; }
+.menu a:hover { background: #fff8f0; color: orange; }
 .dropdown:hover .menu { display: block; }
+.auth-area { display: flex; align-items: center; gap: 8px; margin-left: 8px; }
+.btn-login { padding: 9px 20px; border-radius: 50px; background: none; border: 1.5px solid #e0e0e0; font-size: 13.5px; font-weight: 700; color: #333; cursor: pointer; transition: border-color .2s, color .2s; }
+.btn-login:hover { border-color: orange; color: orange; }
+.btn-signup-head { padding: 9px 20px; border-radius: 50px; background: orange; border: none; font-size: 13.5px; font-weight: 700; color: white; cursor: pointer; transition: background .2s, transform .15s; }
+.btn-signup-head:hover { background: #ffb83f; transform: translateY(-1px); }
+.profile-wrap { position: relative; display: inline-block; }
+.profile-btn { display: flex; align-items: center; gap: 9px; background: #fff; border: 1.5px solid #eee; border-radius: 50px; padding: 6px 14px 6px 6px; cursor: pointer; transition: border-color .2s; font-family: Arial, sans-serif; }
+.profile-btn:hover { border-color: orange; }
+.profile-avatar { width: 30px; height: 30px; border-radius: 50%; background: linear-gradient(135deg, orange, #e65c00); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; color: white; flex-shrink: 0; }
+.profile-name { font-size: 13px; font-weight: 600; color: #222; max-width: 130px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.profile-caret { font-size: 9px; color: #bbb; transition: transform .2s; }
+.profile-wrap.open .profile-caret { transform: rotate(180deg); }
+.profile-dropdown { position: absolute; top: calc(100% + 10px); right: 0; background: #fff; border: 1.5px solid #eee; border-radius: 14px; min-width: 210px; box-shadow: 0 8px 32px rgba(0,0,0,.09); padding: 7px; z-index: 600; opacity: 0; pointer-events: none; transform: translateY(-6px); transition: opacity .2s, transform .2s; }
+.profile-wrap.open .profile-dropdown { opacity: 1; pointer-events: all; transform: translateY(0); }
+.pd-header { padding: 11px 13px 9px; border-bottom: 1px solid #f0f0f0; margin-bottom: 5px; }
+.pd-email { font-size: 12.5px; font-weight: 700; color: #111; word-break: break-all; }
+.pd-role { font-size: 11px; color: #bbb; margin-top: 2px; }
+.pd-item { display: flex; align-items: center; gap: 9px; padding: 9px 13px; border-radius: 9px; font-size: 13px; color: #444; cursor: pointer; text-decoration: none; transition: background .15s, color .15s; }
+.pd-item:hover { background: #fafafa; color: #111; }
+.pd-item i { width: 15px; text-align: center; color: #ccc; font-size: 12px; transition: color .15s; }
+.pd-item:hover i { color: orange; }
+.pd-divider { height: 1px; background: #f0f0f0; margin: 5px 0; }
+.pd-item.logout { color: #e74c3c; }
+.pd-item.logout i { color: #e74c3c; }
+.pd-item.logout:hover { background: rgba(231,76,60,.05); color: #c0392b; }
 
-main { margin-top: 80px; }
+/* ── HERO ── */
+main { margin-top: 0; }
+.hero-section {
+    padding: 100px 80px 80px;
+    text-align: center;
+    max-width: 860px;
+    margin: 0 auto;
+}
+.hero-section h1 {
+    font-size: clamp(2.2rem, 5vw, 3.8rem);
+    font-weight: 900;
+    letter-spacing: -0.04em;
+    line-height: 1.1;
+    color: #111;
+    margin-bottom: 1.25rem;
+}
+.hero-section h1 .orange { color: orange; }
+.hero-eyebrow {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: orange;
+    margin-bottom: 1rem;
+}
+.hero-section p {
+    font-size: 1.05rem;
+    color: #888;
+    line-height: 1.75;
+    max-width: 540px;
+    margin: 0 auto 2.25rem;
+}
+.hero-btns { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; }
+.btn-hero-primary { background: #111; color: #fff; border: none; padding: 14px 32px; border-radius: 50px; font-size: 15px; font-weight: 800; cursor: pointer; transition: background .2s, transform .15s; }
+.btn-hero-primary:hover { background: orange; transform: translateY(-2px); }
+.btn-hero-ghost { background: none; color: #111; border: 1.5px solid #ddd; padding: 14px 32px; border-radius: 50px; font-size: 15px; font-weight: 700; cursor: pointer; transition: border-color .2s, color .2s; }
+.btn-hero-ghost:hover { border-color: orange; color: orange; }
 
-/* ── TITLE ── */
-.title {
-    font-family: Arial, Helvetica, sans-serif;
-    font-weight: 100; margin-top: 60px;
-    display: flex; flex-direction: column; align-items: center;
-}
-#myh2 {
-    font-weight: 100; font-size: 30px; text-align: center;
-    padding-left: 100px; padding-right: 100px;
-}
-
-/* ── BLUR TEXT CHANGER ── */
-.text-changer {
-    height: 58px; display: flex; justify-content: center;
-    align-items: center; font-size: 25px; gap: 0; width: 100%;
-}
-.intro-text { margin: 0; white-space: nowrap; flex-shrink: 0; }
-.roles-container {
-    overflow: visible; position: relative;
-    width: 280px; height: 58px; flex-shrink: 0;
-}
-.role {
-    position: absolute; top: 0; left: 0; margin: 0;
-    padding-left: 6px; white-space: nowrap;
-    opacity: 0; filter: blur(12px);
-    animation: blurFade 9s infinite;
-}
+/* blur changer inside hero */
+.text-changer { height: 52px; display: flex; justify-content: center; align-items: center; gap: 0; margin-bottom: 0.5rem; }
+.intro-text { margin: 0; font-size: clamp(2.2rem, 5vw, 3.8rem); font-weight: 900; letter-spacing: -0.04em; white-space: nowrap; flex-shrink: 0; }
+.roles-container { overflow: visible; position: relative; width: 300px; height: 52px; flex-shrink: 0; }
+.role { position: absolute; top: 0; left: 0; margin: 0; padding-left: 10px; white-space: nowrap; opacity: 0; filter: blur(12px); animation: blurFade 9s infinite; font-size: clamp(2.2rem, 5vw, 3.8rem); font-weight: 900; letter-spacing: -0.04em; color: orange; }
 .role:nth-child(1) { animation-delay: 0s; }
 .role:nth-child(2) { animation-delay: 2.25s; }
 .role:nth-child(3) { animation-delay: 4.5s; }
 .role:nth-child(4) { animation-delay: 6.75s; }
 @keyframes blurFade {
     0%   { opacity: 0; filter: blur(12px); transform: translateY(6px); }
-    8%   { opacity: 1; filter: blur(0px);  transform: translateY(0px); }
-    20%  { opacity: 1; filter: blur(0px);  transform: translateY(0px); }
+    8%   { opacity: 1; filter: blur(0);    transform: translateY(0); }
+    20%  { opacity: 1; filter: blur(0);    transform: translateY(0); }
     28%  { opacity: 0; filter: blur(12px); transform: translateY(-6px); }
     100% { opacity: 0; filter: blur(12px); transform: translateY(-6px); }
 }
 
-/* ── BUTTONS ── */
-.acount-firstpage {
-    display: flex; justify-content: center;
-    align-items: center; gap: 20px; margin-top: 30px;
-}
-.demo {
-    border-radius: 50px; width: 180px; height: 55px; font-size: 20px;
-    font-weight: bold; color: #000; background-color: #fff;
-    cursor: pointer; border: 1px solid #ccc; transition: background-color 0.25s;
-}
-.demo:hover { background-color: #ccc; }
-.signup {
-    border-radius: 50px; width: 180px; height: 55px; font-size: 20px;
-    font-weight: bold; background-color: orange; color: white;
-    cursor: pointer; border: none; transition: background-color 0.25s;
-}
-.signup:hover { background-color: rgb(255,198,93); }
+/* ── DIVIDER ── */
+.divider { border: none; border-top: 1px solid #f0f0f0; margin: 0 48px; }
 
-/* ══════════════════════
-   EXPANDING BOXES
-══════════════════════ */
-.container {
-    display: flex;
-    justify-content: center;
-    align-items: stretch;
-    gap: 14px;
-    margin-top: 60px;
-    padding: 0 60px;
-    height: 420px;
-}
+/* ── STEPS + VIDEO ── */
+.steps-video-section { padding: 96px 80px; background: #fff; }
+.steps-video-inner { display: grid; grid-template-columns: 1fr 1fr; max-width: 1080px; margin: 0 auto; gap: 0; min-height: 520px; }
+.sv-left { padding: 2rem 3rem 2rem 0; display: flex; flex-direction: column; justify-content: center; }
+.sv-heading { font-size: clamp(1.75rem, 2.8vw, 2.4rem); font-weight: 900; color: #111; line-height: 1.18; letter-spacing: -0.03em; margin-bottom: 2rem; }
+.sv-heading span { color: orange; }
+.sv-steps { display: flex; flex-direction: column; }
+.sv-step { display: flex; align-items: flex-start; gap: 1rem; padding: 1.1rem 0; border-bottom: 1px solid #f0f0f0; cursor: pointer; transition: all 0.2s; position: relative; }
+.sv-step:last-child { border-bottom: none; }
+.sv-num { width: 32px; height: 32px; border-radius: 50%; background: #f5f5f5; border: 2px solid #e8e8e8; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; color: #ccc; flex-shrink: 0; transition: all 0.25s; }
+.sv-step.active .sv-num, .sv-step:hover .sv-num { background: orange; border-color: orange; color: #fff; transform: scale(1.08); }
+.sv-title { font-size: 0.95rem; font-weight: 800; color: #111; margin-bottom: 0.2rem; transition: color 0.2s; }
+.sv-step.active .sv-title, .sv-step:hover .sv-title { color: orange; }
+.sv-desc { font-size: 0.82rem; color: #aaa; line-height: 1.6; max-width: 300px; }
+.sv-prog { height: 2px; background: #f0f0f0; border-radius: 2px; margin-top: 0.6rem; overflow: hidden; display: none; }
+.sv-step.active .sv-prog { display: block; }
+.sv-prog-fill { height: 100%; background: orange; border-radius: 2px; width: 0%; }
+.sv-cta { margin-top: 1.75rem; display: flex; align-items: center; gap: 1.25rem; flex-wrap: wrap; }
+.sv-btn-main { background: #111; color: #fff; border: none; padding: 0.75rem 1.6rem; border-radius: 50px; font-size: 0.875rem; font-weight: 800; cursor: pointer; font-family: Arial, sans-serif; transition: all 0.2s; }
+.sv-btn-main:hover { background: orange; transform: translateY(-1px); }
+.sv-btn-link { background: none; border: none; font-size: 0.85rem; color: #999; font-weight: 600; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; font-family: Arial, sans-serif; }
+.sv-btn-link:hover { color: orange; }
+.sv-right { position: relative; background: orange; overflow: hidden; display: flex; align-items: stretch; border-radius: 20px; }
+.sv-right::before { content: ''; position: absolute; inset: 0; z-index: 1; background: radial-gradient(circle at 75% 20%, rgba(255,255,255,0.1) 0%, transparent 55%), radial-gradient(circle at 25% 80%, rgba(0,0,0,0.07) 0%, transparent 55%); pointer-events: none; }
+.sv-video-wrap { position: relative; width: 100%; height: 100%; min-height: 400px; display: flex; align-items: center; justify-content: center; z-index: 2; }
+.sv-video-wrap video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+.sv-video-placeholder { display: flex; flex-direction: column; align-items: center; gap: 0.85rem; text-align: center; padding: 2rem; position: relative; z-index: 3; }
+.sv-placeholder-icon { font-size: 3rem; opacity: 0.55; }
+.sv-placeholder-text { color: rgba(255,255,255,0.8); font-size: 0.85rem; font-weight: 600; line-height: 1.55; }
+.sv-placeholder-text code { background: rgba(255,255,255,0.15); padding: 2px 6px; border-radius: 4px; font-size: 0.75rem; }
+.sv-step-badge { position: absolute; top: 1.1rem; right: 1.1rem; background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.28); color: #fff; border-radius: 100px; padding: 0.28rem 0.75rem; font-size: 0.7rem; font-weight: 700; z-index: 4; backdrop-filter: blur(6px); }
 
-.box {
-    border-radius: 20px;
-    overflow: hidden;
-    cursor: pointer;
-    position: relative;
-    transition: flex 0.55s cubic-bezier(0.4, 0, 0.2, 1);
-    flex: 1;
-    min-width: 70px;
-}
-.box::before {
-    content: '';
-    position: absolute; inset: 0; z-index: 1;
-    border-radius: 20px;
-    background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, transparent 60%);
-    pointer-events: none;
-}
-
-/* Box 1 expands LEFT (grows to left, so transform-origin right) */
-/* Box 2 expands RIGHT */
-.container:has(#box1:hover) #box1 { flex: 3.5; }
-.container:has(#box1:hover) #box2 { flex: 0.3; }
-.container:has(#box2:hover) #box2 { flex: 3.5; }
-.container:has(#box2:hover) #box1 { flex: 0.3; }
-
-/* collapsed label */
-.box-label {
-    position: absolute; top: 50%; left: 50%;
-    transform: translate(-50%, -50%) rotate(-90deg);
-    font-family: Arial, sans-serif; font-size: 14px;
-    font-weight: bold; color: rgba(255,255,255,0.45);
-    white-space: nowrap; pointer-events: none;
-    transition: opacity 0.2s;
-}
-.box:hover .box-label { opacity: 0; }
-
-/* content inside box */
-.box-content {
-    opacity: 0;
-    transform: translateX(-10px);
-    transition: opacity 0.35s ease 0.2s, transform 0.35s ease 0.2s;
-    padding: 36px 32px;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    color: white;
-    min-width: 340px;
-}
-.box:hover .box-content { opacity: 1; transform: translateX(0); }
-
-/* ── BOX 1 — AI Chat ── */
-#box1 {
-    background: linear-gradient(135deg, rgba(255,140,0,0.55), rgba(255,100,0,0.4));
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
-    border: 1px solid rgba(255,180,50,0.35);
-    box-shadow: 0 8px 32px rgba(255,120,0,0.25), inset 0 1px 0 rgba(255,255,255,0.2);
-}
-#box1-bg {
-    position: absolute; inset: 0; z-index: 0;
-    background: linear-gradient(135deg, rgba(255,100,0,0.7), rgba(255,180,0,0.5));
-}
-#box1-bg img {
-    width: 100%; height: 100%; object-fit: cover;
-    opacity: 0.25; display: block;
-    transition: opacity 0.4s ease;
-}
-#box1:hover #box1-bg img { opacity: 0.1; }
-#box1 .box-label { color: rgba(255,255,255,0.7); }
-#box1 .box-content { position: relative; z-index: 1; }
-
-.ai-box-title {
-    font-family: Arial, sans-serif; font-size: 22px;
-    font-weight: bold; color: orange; margin-bottom: 6px;
-}
-.ai-box-name {
-    font-size: 13px; color: rgba(255,255,255,0.5);
-    margin-bottom: 18px; font-style: italic;
-}
-.ai-box-desc {
-    font-size: 14px; color: rgba(255,255,255,0.65);
-    margin-bottom: 20px; line-height: 1.6;
-}
-.ai-box-input-row {
-    display: flex; gap: 10px; align-items: center;
-}
-.ai-box-input {
-    flex: 1; height: 42px; border-radius: 50px;
-    border: 1px solid rgba(255,255,255,0.2);
-    background: rgba(255,255,255,0.08);
-    color: white; padding: 0 16px; font-size: 14px; outline: none;
-}
-.ai-box-input::placeholder { color: rgba(255,255,255,0.3); }
-.ai-box-input:focus { border-color: rgba(255,165,0,0.6); }
-.ai-box-send {
-    height: 42px; padding: 0 20px; border-radius: 50px;
-    background: orange; border: none; color: white;
-    font-weight: bold; cursor: pointer; font-size: 14px;
-    white-space: nowrap; transition: background 0.2s;
-}
-.ai-box-send:hover { background: rgb(255,198,93); }
-.ai-response {
-    margin-top: 14px; font-size: 13.5px;
-    color: rgba(255,255,255,0.75); line-height: 1.6;
-    min-height: 44px; font-style: italic;
-}
-
-/* ── BOX 2 — Stats ── */
-#box2 {
-    background: rgba(10, 10, 10, 0.65);
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
-    border: 1px solid rgba(255,255,255,0.08);
-    box-shadow: 0 8px 32px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.07);
-}
-#box2-bg {
-    position: absolute; inset: 0; z-index: 0;
-    background: rgba(0,0,0,0.5);
-}
-#box2-bg img {
-    width: 100%; height: 100%; object-fit: cover;
-    opacity: 0.22; display: block;
-    filter: grayscale(30%);
-    transition: opacity 0.4s ease;
-}
-#box2:hover #box2-bg img { opacity: 0.08; }
-#box2 .box-content { position: relative; z-index: 1; }
-#box2 .box-label { color: rgba(255,255,255,0.35); }
-
-.info-box-title {
-    font-family: Arial, sans-serif; font-size: 22px;
-    font-weight: bold; color: #ffffff; margin-bottom: 10px;
-}
-.info-box-desc {
-    font-size: 14px; color: rgba(255,255,255,0.7); line-height: 1.7; margin-bottom: 22px;
-}
-.info-stats { display: flex; gap: 24px; }
-.info-stat { text-align: center; }
-.info-stat-num {
-    font-family: Arial, sans-serif; font-size: 30px;
-    font-weight: bold; color: #fff;
-}
-.info-stat-label { font-size: 11px; color: rgba(255,255,255,0.55); margin-top: 2px; }
-
-/* ══════════════════════
-   MONEY / CAROUSEL
-══════════════════════ */
-.money-section {
-    margin-top: 80px;
-    padding: 0 60px 60px;
-}
-.money-title {
-    font-family: Arial, sans-serif; font-size: 28px;
-    font-weight: 100; text-align: center; margin-bottom: 8px;
-}
-.money-title span { font-weight: bold; color: orange; }
-.money-sub {
-    text-align: center; font-size: 15px;
-    color: #888; margin-bottom: 44px;
-}
-
-.carousel-wrap {
-    overflow-x: auto; padding: 20px 0 36px;
-    scrollbar-width: none; /* Firefox */
-}
-.carousel-wrap::-webkit-scrollbar { display: none; }
-
-.carousel-track {
-    display: flex;
-    gap: 20px;
-    align-items: center;
-    width: max-content;
-    padding: 0 40px;
-    cursor: grab;
-    transition: none;
-}
-.carousel-track:active { cursor: grabbing; }
-
-.c-card {
-    border-radius: 18px;
-    overflow: hidden;
-    flex-shrink: 0;
-    position: relative;
-    cursor: pointer;
-    transition:
-        width  0.45s cubic-bezier(0.4,0,0.2,1),
-        height 0.45s cubic-bezier(0.4,0,0.2,1),
-        box-shadow 0.3s ease,
-        transform 0.35s ease;
-    width: 200px;
-    height: 260px;
-    background: #eee;
-}
-.c-card.active {
-    width: 320px;
-    height: 380px;
-    box-shadow: 0 24px 60px rgba(0,0,0,0.22);
-    transform: translateY(-14px);
-    z-index: 2;
-}
-.c-card img {
-    width: 100%; height: 100%;
-    object-fit: cover; display: block;
-    transition: transform 0.4s ease;
-    pointer-events: none;
-}
-.c-card:hover img { transform: scale(1.05); }
-.c-card-label {
-    position: absolute; bottom: 0; left: 0; right: 0;
-    background: linear-gradient(transparent, rgba(0,0,0,0.72));
-    color: white; font-family: Arial, sans-serif;
-    font-size: 13px; font-weight: bold;
-    padding: 32px 14px 14px;
-    opacity: 0; transition: opacity 0.3s ease;
-}
-.c-card.active .c-card-label,
-.c-card:hover .c-card-label { opacity: 1; }
-
-/* dots + arrows */
-.carousel-dots {
-    display: flex; justify-content: center;
-    gap: 8px; margin-top: 16px;
-}
-.c-dot {
-    width: 8px; height: 8px; border-radius: 50%;
-    background: #ccc; cursor: pointer;
-    transition: background 0.3s, width 0.3s, border-radius 0.3s;
-}
-.c-dot.active { background: orange; width: 24px; border-radius: 4px; }
-.carousel-arrows {
-    display: flex; justify-content: center;
-    gap: 12px; margin-top: 14px;
-}
-.c-arrow {
-    width: 40px; height: 40px; border-radius: 50%;
-    background: #fff; border: 1px solid #ddd;
-    font-size: 18px; cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    transition: background 0.2s, color 0.2s;
-}
-.c-arrow:hover { background: orange; border-color: orange; color: white; }
-
-
-
-/* ══════════════════════
-   VIDEO SECTION
-══════════════════════ */
-.video-section {
-    padding: 60px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background: #fff;
-}
-.video-label {
-    font-family: Arial, sans-serif;
-    font-size: 14px;
-    font-weight: 700;
-    letter-spacing: .1em;
-    text-transform: uppercase;
-    color: orange;
-    margin-bottom: 10px;
-}
-.video-title {
-    font-family: Arial, sans-serif;
-    font-size: 32px;
-    font-weight: 900;
-    color: #111;
-    text-align: center;
-    margin-bottom: 8px;
-    letter-spacing: -.02em;
-}
-.video-sub {
-    font-size: 15px;
-    color: #999;
-    text-align: center;
-    margin-bottom: 40px;
-    max-width: 520px;
-    line-height: 1.7;
-}
-.video-frame {
-    width: 100%;
-    max-width: 900px;
-    aspect-ratio: 16/9;
-    background: #f5f5f5;
+/* ── PRODUCT PICKER ── */
+.product-section { padding: 80px 80px 72px; background: #fff; }
+.product-section-inner { max-width: 1080px; margin: 0 auto; }
+.section-eyebrow { font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: orange; margin-bottom: 10px; }
+.section-title { font-size: clamp(1.6rem, 2.8vw, 2.2rem); font-weight: 900; color: #111; letter-spacing: -0.03em; margin-bottom: 0.6rem; }
+.section-sub { font-size: 0.9rem; color: #aaa; line-height: 1.7; max-width: 480px; margin-bottom: 2.5rem; }
+.product-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; }
+.prod-btn {
+    border: 1.5px solid #ececec;
     border-radius: 16px;
-    border: 1.5px solid #e0e0e0;
-    overflow: hidden;
-    position: relative;
+    background: #fff;
     cursor: pointer;
-}
-.video-frame video {
-    width: 100%; height: 100%;
-    object-fit: cover; display: block;
-}
-.play-overlay {
-    position: absolute; inset: 0;
-    display: flex; align-items: center; justify-content: center;
-    background: rgba(245,245,245,0.6);
-    transition: background .2s;
-}
-.video-frame:hover .play-overlay { background: rgba(245,245,245,0.4); }
-.play-btn-circle {
-    width: 72px; height: 72px;
-    border-radius: 35px;
-    background: #fff;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 24px; color: #555;
-    transition: border-color .2s, color .2s;
-}
-.video-frame:hover .play-btn-circle { border-color: #aaa; color: #222; }
-
-/* ══════════════════════
-   PRICING SECTION
-══════════════════════ */
-.pricing-section {
-    padding: 80px 60px;
-    background: #fff;
+    padding: 0;
+    overflow: hidden;
+    transition: border-color .2s, transform .2s, box-shadow .2s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     font-family: Arial, sans-serif;
 }
-.pricing-header {
-    text-align: center;
-    margin-bottom: 56px;
+.prod-btn:hover { border-color: orange; transform: translateY(-3px); box-shadow: 0 10px 28px rgba(255,165,0,.12); }
+.prod-btn.active { border-color: orange; background: #fff9f2; }
+.prod-img-wrap {
+    width: 100%;
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
 }
-.pricing-label {
-    font-size: 13px; font-weight: 700;
-    letter-spacing: .12em; text-transform: uppercase;
-    color: orange; margin-bottom: 10px;
-}
-.pricing-title {
-    font-size: 34px; font-weight: 900;
-    color: #111; letter-spacing: -.025em; margin-bottom: 10px;
-}
-.pricing-sub {
-    font-size: 15px; color: #aaa; line-height: 1.7;
-}
+.prod-img-wrap img { width: 85%; height: 85%; object-fit: contain; transition: transform .3s ease; }
+.prod-btn:hover .prod-img-wrap img { transform: scale(1.06); }
+.prod-label { font-size: 12.5px; font-weight: 700; color: #333; padding: 10px 8px 12px; text-align: center; }
+.prod-btn.active .prod-label { color: orange; }
 
-.plans-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 24px;
-    max-width: 960px;
-    margin: 0 auto;
+/* ── INTEGRATIONS ── */
+.integrations-section { padding: 80px 80px 72px; background: #fafafa; overflow: hidden; }
+.integrations-inner { max-width: 1080px; margin: 0 auto; }
+.integrations-top { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 3rem; gap: 2rem; flex-wrap: wrap; }
+.integrations-headline { font-size: clamp(2.2rem, 4.5vw, 4rem); font-weight: 900; line-height: 1.05; letter-spacing: -0.04em; color: #111; }
+.integrations-headline .line2 { color: orange; display: block; }
+.integrations-headline .line3 { -webkit-text-stroke: 2px #111; color: transparent; display: block; }
+.integrations-tagline { font-size: 0.9rem; color: #aaa; line-height: 1.7; max-width: 280px; }
+
+/* scrolling logos — LARGE 3-platform version */
+.logo-scroll-wrap { position: relative; overflow: hidden; padding: 12px 0; }
+.logo-scroll-wrap::before, .logo-scroll-wrap::after {
+    content: ''; position: absolute; top: 0; bottom: 0; width: 120px; z-index: 2; pointer-events: none;
 }
-.plan-card {
-    border: 1.5px solid #eee;
-    border-radius: 20px;
-    padding: 36px 30px;
+.logo-scroll-wrap::before { left: 0; background: linear-gradient(to right, #fafafa, transparent); }
+.logo-scroll-wrap::after  { right: 0; background: linear-gradient(to left,  #fafafa, transparent); }
+.logo-track {
+    display: flex;
+    gap: 28px;
+    width: max-content;
+    animation: scrollLogos 18s linear infinite;
+}
+.logo-track:hover { animation-play-state: paused; }
+@keyframes scrollLogos { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+.logo-pill {
+    display: flex;
+    align-items: center;
+    gap: 18px;
     background: #fff;
-    position: relative;
-    transition: transform .2s, box-shadow .2s;
+    border: 2px solid #ececec;
+    border-radius: 24px;
+    padding: 20px 36px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    font-size: 22px;
+    font-weight: 800;
+    color: #222;
+    transition: border-color .2s, box-shadow .2s, transform .2s;
+    box-shadow: 0 4px 16px rgba(0,0,0,.05);
+    cursor: default;
+    letter-spacing: -0.01em;
 }
-.plan-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 16px 48px rgba(0,0,0,.08);
-}
-.plan-name {
-    font-size: 13px; font-weight: 700;
-    letter-spacing: .08em; text-transform: uppercase;
-    color: #999; margin-bottom: 12px;
-}
-.plan-price {
-    font-size: 52px; font-weight: 900;
-    color: #111; letter-spacing: -.04em;
-    line-height: 1; margin-bottom: 4px;
-}
-.plan-price sup { font-size: 22px; vertical-align: super; font-weight: 700; }
-.plan-period { font-size: 13px; color: #bbb; margin-bottom: 28px; }
-
-.plan-features { list-style: none; margin-bottom: 32px; }
-.plan-features li {
-    display: flex; align-items: center; gap: 10px;
-    font-size: 14px; color: #555;
-    padding: 9px 0;
-    border-bottom: 1px solid #f0f0f0;
-}
-.plan-features li::before {
-    content: '✓';
-    color: orange; font-weight: 900; font-size: 13px; flex-shrink: 0;
-}
-.plan-features li.no::before { content: '✗'; color: #ddd; }
-.plan-features li.no { color: #ccc; }
-
-.btn-plan {
-    width: 100%; padding: 14px; border-radius: 50px;
-    font-size: 15px; font-weight: 800; cursor: pointer;
-    transition: all .2s; border: 2px solid #111;
-    background: #111; color: #fff;
-}
-.btn-plan:hover { background: #333; border-color: #333; }
-
-
-/* ══════════════════════
-   WHY GOMART / FAQ
-══════════════════════ */
-.why-section {
-    padding: 80px 60px;
-    background: #fafafa;
-    font-family: Arial, sans-serif;
-}
-.why-header {
-    text-align: center; margin-bottom: 56px;
-}
-.why-label {
-    font-size: 13px; font-weight: 700;
-    letter-spacing: .12em; text-transform: uppercase;
-    color: orange; margin-bottom: 10px;
-}
-.why-title {
-    font-size: 34px; font-weight: 900;
-    color: #111; letter-spacing: -.025em; margin-bottom: 10px;
-}
-.why-sub { font-size: 15px; color: #aaa; line-height: 1.7; }
-
-.why-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-    max-width: 1000px;
-    margin: 0 auto 60px;
-}
-.why-card {
-    background: #fff;
-    border: 1.5px solid #eee;
-    border-radius: 18px;
-    padding: 32px 26px;
-    transition: transform .2s, box-shadow .2s, border-color .2s;
-}
-.why-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 36px rgba(0,0,0,.08);
+.logo-pill:hover {
     border-color: orange;
-}
-.why-icon {
-    width: 48px; height: 48px; border-radius: 14px;
-    background: rgba(255,165,0,.1); border: 1.5px solid rgba(255,165,0,.2);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 18px; color: orange; margin-bottom: 18px;
-}
-.why-card h3 {
-    font-size: 17px; font-weight: 800; color: #111;
-    margin-bottom: 10px; letter-spacing: -.01em;
-}
-.why-card p {
-    font-size: 14px; color: #888; line-height: 1.7;
+    box-shadow: 0 8px 32px rgba(255,165,0,.15);
+    transform: translateY(-2px);
 }
 
-/* FAQ */
-.faq-wrap {
-    max-width: 720px; margin: 0 auto;
+.lp-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 12px;
+    object-fit: contain;
+    flex-shrink: 0;
+    display: block;
 }
-.faq-title {
-    font-size: 26px; font-weight: 900; color: #111;
-    text-align: center; margin-bottom: 32px; letter-spacing: -.02em;
-}
-.faq-item {
-    border-bottom: 1.5px solid #eee;
-    padding: 20px 0; cursor: pointer;
-}
-.faq-q {
-    display: flex; align-items: center; justify-content: space-between; gap: 16px;
-    font-size: 15px; font-weight: 700; color: #111;
-}
-.faq-icon {
-    width: 28px; height: 28px; border-radius: 50%;
-    background: #f5f5f5; border: 1.5px solid #eee;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 16px; color: #aaa; flex-shrink: 0;
-    transition: background .2s, color .2s, transform .25s;
-}
+
+.stats-row { display: flex; gap: 40px; margin-top: 3rem; flex-wrap: wrap; }
+.stat-item { }
+.stat-num { font-size: 2.2rem; font-weight: 900; color: #111; letter-spacing: -0.04em; }
+.stat-num span { color: orange; }
+.stat-label { font-size: 12px; color: #aaa; margin-top: 2px; }
+
+/* ── FAQ ── */
+.faq-section { padding: 80px 80px 72px; background: #fff; }
+.faq-inner { max-width: 1080px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: start; }
+.faq-left h2 { font-size: clamp(1.6rem, 2.8vw, 2.2rem); font-weight: 900; color: #111; letter-spacing: -0.03em; margin-bottom: 0.75rem; }
+.faq-left p { font-size: 0.9rem; color: #aaa; line-height: 1.7; }
+.faq-list { display: flex; flex-direction: column; }
+.faq-item { border-bottom: 1px solid #f0f0f0; padding: 18px 0; cursor: pointer; }
+.faq-q { display: flex; align-items: center; justify-content: space-between; gap: 16px; font-size: 14px; font-weight: 700; color: #111; }
+.faq-icon { width: 26px; height: 26px; border-radius: 50%; background: #f5f5f5; border: 1.5px solid #eee; display: flex; align-items: center; justify-content: center; font-size: 15px; color: #bbb; flex-shrink: 0; transition: background .2s, color .2s, transform .25s; }
 .faq-item:hover .faq-icon { background: orange; color: white; border-color: orange; }
 .faq-item.open .faq-icon { background: orange; color: white; border-color: orange; transform: rotate(45deg); }
-.faq-a {
-    font-size: 14px; color: #888; line-height: 1.75;
-    max-height: 0; overflow: hidden;
-    transition: max-height .35s ease, margin-top .3s ease;
-}
-.faq-item.open .faq-a { max-height: 200px; margin-top: 12px; }
+.faq-a { font-size: 13.5px; color: #888; line-height: 1.75; max-height: 0; overflow: hidden; transition: max-height .35s ease, margin-top .3s ease; }
+.faq-item.open .faq-a { max-height: 200px; margin-top: 10px; }
 
-
-/* ══════════════════════
-   SCROLL TRANSITIONS
-══════════════════════ */
-.reveal {
-    opacity: 0;
-    transform: translateY(36px);
-    transition: opacity 0.65s cubic-bezier(0.4,0,0.2,1),
-                transform 0.65s cubic-bezier(0.4,0,0.2,1);
-}
-.reveal.visible {
-    opacity: 1;
-    transform: translateY(0);
-}
-.reveal-left {
-    opacity: 0;
-    transform: translateX(-40px);
-    transition: opacity 0.65s cubic-bezier(0.4,0,0.2,1),
-                transform 0.65s cubic-bezier(0.4,0,0.2,1);
-}
-.reveal-left.visible { opacity: 1; transform: translateX(0); }
-
-.reveal-right {
-    opacity: 0;
-    transform: translateX(40px);
-    transition: opacity 0.65s cubic-bezier(0.4,0,0.2,1),
-                transform 0.65s cubic-bezier(0.4,0,0.2,1);
-}
-.reveal-right.visible { opacity: 1; transform: translateX(0); }
-
-/* stagger delay helpers */
-.d1 { transition-delay: 0.05s; }
-.d2 { transition-delay: 0.15s; }
-.d3 { transition-delay: 0.25s; }
-.d4 { transition-delay: 0.35s; }
-.d5 { transition-delay: 0.45s; }
-.d6 { transition-delay: 0.55s; }
-
-/* ══════════════════════
-   FOOTER
-══════════════════════ */
-footer {
-    background: #111;
-    color: #aaa;
-    font-family: Arial, sans-serif;
-    padding: 64px 60px 32px;
-}
-.footer-grid {
+/* ── CTA FINAL ── */
+.cta-final {
+    background-color: #fff8f0;
+    padding: 100px 80px;
+    position: relative;
+    overflow: hidden;
     display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr;
-    gap: 40px;
-    margin-bottom: 48px;
-}
-.footer-brand img {
-    height: 48px;
-    object-fit: contain;
-    margin-bottom: 16px;
-    display: block;
-}
-.footer-brand p {
-    font-size: 14px;
-    line-height: 1.75;
-    color: #666;
-    max-width: 260px;
-}
-.footer-col h4 {
-    font-size: 12px;
-    font-weight: 800;
-    letter-spacing: .1em;
-    text-transform: uppercase;
-    color: #fff;
-    margin-bottom: 18px;
-}
-.footer-col a {
-    display: block;
-    font-size: 14px;
-    color: #666;
-    text-decoration: none;
-    margin-bottom: 11px;
-    transition: color .2s;
-}
-.footer-col a:hover { color: orange; }
-.footer-bottom {
-    border-top: 1px solid #222;
-    padding-top: 24px;
-    display: flex;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
     align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
+}
+.cta-final-bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+}
+.cta-final-bg svg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+.cta-final::before {
+    content: '';
+    position: absolute; inset: 0; z-index: 1;
+    background: rgba(255, 248, 240, 0.52);
+    pointer-events: none;
+}
+.cta-final-left { position: relative; z-index: 2; }
+.cta-eyebrow { font-size: 11.5px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: #e65c00; margin-bottom: 1rem; }
+.cta-final-left h2 {
+    font-size: clamp(2.2rem, 4vw, 3.5rem);
+    font-weight: 900;
+    color: #111;
+    letter-spacing: -0.04em;
+    line-height: 1.1;
+    margin-bottom: 1.25rem;
+}
+.cta-final-left h2 span { color: orange; }
+.cta-final-left p { font-size: 0.95rem; color: #555; line-height: 1.75; margin-bottom: 2rem; max-width: 400px; }
+.cta-btn-row { display: flex; gap: 12px; flex-wrap: wrap; }
+.btn-cta-orange { background: #111; color: #fff; border: none; padding: 14px 30px; border-radius: 50px; font-size: 15px; font-weight: 800; cursor: pointer; font-family: Arial, sans-serif; transition: background .2s, transform .15s; }
+.btn-cta-orange:hover { background: orange; transform: translateY(-2px); }
+.btn-cta-outline { background: none; color: #111; border: 1.5px solid rgba(0,0,0,0.2); padding: 14px 28px; border-radius: 50px; font-size: 15px; font-weight: 700; cursor: pointer; font-family: Arial, sans-serif; transition: border-color .2s, color .2s; }
+.btn-cta-outline:hover { border-color: orange; color: orange; }
+.cta-final-right { position: relative; z-index: 2; display: flex; flex-direction: column; gap: 14px; }
+.cta-product-preview {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     gap: 12px;
 }
-.footer-bottom p { font-size: 13px; color: #555; }
-.footer-socials { display: flex; gap: 12px; }
-.footer-socials a {
-    width: 36px; height: 36px; border-radius: 50%;
-    background: #1e1e1e; border: 1px solid #2a2a2a;
-    display: flex; align-items: center; justify-content: center;
-    color: #666; font-size: 14px; text-decoration: none;
-    transition: background .2s, color .2s, border-color .2s;
+.cta-prod-card {
+    background: rgba(255,255,255,0.75);
+    border: 1.5px solid rgba(255,165,0,0.25);
+    border-radius: 14px;
+    padding: 18px 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    transition: border-color .2s, transform .2s, background .2s;
+    backdrop-filter: blur(6px);
 }
+.cta-prod-card:hover { border-color: orange; transform: translateY(-3px); background: rgba(255,255,255,0.92); }
+.cta-prod-img { width: 64px; height: 64px; object-fit: contain; }
+.cta-prod-name { font-size: 12px; font-weight: 700; color: #333; text-align: center; }
+.cta-prod-price { font-size: 11px; color: orange; font-weight: 700; }
+
+/* ── WHY GOMART ── */
+.why-section { padding: 80px 80px 72px; background: #fafafa; }
+.why-inner { max-width: 1080px; margin: 0 auto; }
+.why-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 2.5rem; }
+.why-card { background: #fff; border: 1.5px solid #ececec; border-radius: 16px; padding: 28px 24px; transition: transform .2s, box-shadow .2s, border-color .2s; }
+.why-card:hover { transform: translateY(-3px); box-shadow: 0 10px 32px rgba(0,0,0,.06); border-color: orange; }
+.why-icon { width: 44px; height: 44px; border-radius: 12px; background: rgba(255,165,0,.08); border: 1.5px solid rgba(255,165,0,.18); display: flex; align-items: center; justify-content: center; font-size: 17px; color: orange; margin-bottom: 16px; }
+.why-card h3 { font-size: 15px; font-weight: 800; color: #111; margin-bottom: 8px; }
+.why-card p { font-size: 13px; color: #999; line-height: 1.7; }
+
+/* ── FOOTER ── */
+footer { background: #111; color: #aaa; padding: 64px 80px 32px; }
+.footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 48px; }
+.footer-brand img { height: 44px; object-fit: contain; margin-bottom: 14px; display: block; }
+.footer-brand p { font-size: 13.5px; line-height: 1.75; color: #555; max-width: 240px; }
+.footer-col h4 { font-size: 11px; font-weight: 800; letter-spacing: .11em; text-transform: uppercase; color: #fff; margin-bottom: 16px; }
+.footer-col a { display: block; font-size: 13.5px; color: #555; text-decoration: none; margin-bottom: 10px; transition: color .2s; }
+.footer-col a:hover { color: orange; }
+.footer-bottom { border-top: 1px solid #1e1e1e; padding-top: 22px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+.footer-bottom p { font-size: 12.5px; color: #444; }
+.footer-socials { display: flex; gap: 10px; }
+.footer-socials a { width: 34px; height: 34px; border-radius: 50%; background: #1a1a1a; border: 1px solid #222; display: flex; align-items: center; justify-content: center; color: #555; font-size: 13px; text-decoration: none; transition: background .2s, color .2s, border-color .2s; }
 .footer-socials a:hover { background: orange; color: #fff; border-color: orange; }
 
-@media (max-width: 768px) {
+/* ── REVEAL ── */
+.reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.6s cubic-bezier(0.4,0,0.2,1), transform 0.6s cubic-bezier(0.4,0,0.2,1); }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.d1 { transition-delay: 0.05s; } .d2 { transition-delay: 0.13s; } .d3 { transition-delay: 0.21s; }
+.d4 { transition-delay: 0.29s; } .d5 { transition-delay: 0.37s; } .d6 { transition-delay: 0.45s; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 960px) {
+    .steps-video-inner { grid-template-columns: 1fr; }
+    .sv-right { border-radius: 16px; min-height: 300px; }
+    .sv-left { padding: 0 0 2rem 0; }
+    .product-grid { grid-template-columns: repeat(3, 1fr); }
+    .faq-inner { grid-template-columns: 1fr; gap: 36px; }
+    .cta-final { grid-template-columns: 1fr; }
+    .why-grid { grid-template-columns: 1fr 1fr; }
+    .integrations-top { flex-direction: column; }
+}
+@media (max-width: 640px) {
+    header { padding: 0 20px; }
+    .hero-section { padding: 72px 24px 60px; }
+    .steps-video-section, .product-section, .integrations-section, .faq-section, .cta-final, .why-section { padding: 56px 24px; }
+    .divider { margin: 0 20px; }
+    .product-grid { grid-template-columns: repeat(2, 1fr); }
+    .why-grid { grid-template-columns: 1fr; }
     .footer-grid { grid-template-columns: 1fr 1fr; }
     footer { padding: 48px 24px 28px; }
+    .cta-product-preview { grid-template-columns: 1fr 1fr; }
 }
-@media (max-width: 480px) {
+@media (max-width: 400px) {
     .footer-grid { grid-template-columns: 1fr; }
 }
-
 </style>
 
 <body>
+
+<!-- HEADER -->
 <header>
     <img id="logo" src="/images/logo-text.png" alt="Gomart">
     <div id="droptext">
         <div class="dropdown">
-            <button class="triger">Gomart</button>
-            <div class="menu">
-                <a href="">Our Story</a>
-                <a href="">Team</a>
-                <a href="">Awards</a>
-            </div>
+            <button class="triger">Gomart <i class="fa-solid fa-chevron-down" style="font-size:8px;color:#ccc;margin-left:2px;"></i></button>
+            <div class="menu"><a href="">Our Story</a><a href="">Team</a><a href="">Awards</a></div>
         </div>
         <div class="dropdown">
-            <button class="triger">Features</button>
-            <div class="menu">
-                <a href="">Analytics</a>
-                <a href="">AI Assistant</a>
-            </div>
+            <button class="triger">Features <i class="fa-solid fa-chevron-down" style="font-size:8px;color:#ccc;margin-left:2px;"></i></button>
+            <div class="menu"><a href="">Analytics</a><a href="">AI Assistant</a></div>
         </div>
         <div class="dropdown">
-            <button class="triger">Pricing</button>
-            <div class="menu">
-                <a href="">Starter</a>
-                <a href="">Growth</a>
-            </div>
+            <button class="triger">Pricing <i class="fa-solid fa-chevron-down" style="font-size:8px;color:#ccc;margin-left:2px;"></i></button>
+            <div class="menu"><a href="">Starter</a><a href="">Growth</a></div>
         </div>
         <div class="dropdown">
-            <button class="triger">Contact us</button>
-            <div class="menu">
-                <a href="">Email</a>
-                <a href="">WhatsApp</a>
+            <button class="triger">Contact <i class="fa-solid fa-chevron-down" style="font-size:8px;color:#ccc;margin-left:2px;"></i></button>
+            <div class="menu"><a href="">Email</a><a href="">WhatsApp</a></div>
+        </div>
+        <div style="width:1px;height:20px;background:#ececec;margin:0 6px;"></div>
+        <button class="Buttontry" onclick="window.location.href='gomart-fixed.html'">Try Gomart</button>
+        <div class="auth-area" id="authArea">
+            <div id="guestBtns" style="display:flex;align-items:center;gap:8px;">
+                <button class="btn-login" onclick="window.location.href='signin.html'">Log In</button>
+                <button class="btn-signup-head" id="signupBtn" onclick="window.location.href='signup.html'">Sign Up Free</button>
+            </div>
+            <div class="profile-wrap" id="profileWrap" style="display:none;">
+                <button class="profile-btn" onclick="toggleProfile()">
+                    <div class="profile-avatar" id="profileInitial">?</div>
+                    <span class="profile-name" id="profileEmail">user</span>
+                    <i class="fa-solid fa-chevron-down profile-caret"></i>
+                </button>
+                <div class="profile-dropdown" id="profileDropdown">
+                    <div class="pd-header"><div class="pd-email" id="pdEmail">—</div><div class="pd-role">Gomart Seller</div></div>
+                    <a class="pd-item" href="#"><i class="fa-solid fa-gauge"></i> Dashboard</a>
+                    <a class="pd-item" href="#"><i class="fa-solid fa-store"></i> My Store</a>
+                    <a class="pd-item" href="#"><i class="fa-solid fa-gear"></i> Settings</a>
+                    <div class="pd-divider"></div>
+                    <div class="pd-item logout" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> Log Out</div>
+                </div>
             </div>
         </div>
-        <button class="Buttontry">Try Gomart</button>
     </div>
 </header>
-<hr>
 
 <main>
-    <!-- HERO -->
-    <div class="title reveal">
-        <div class="text-changer">
-            <h1 class="intro-text reveal d1">Gomart helps you</h1>
-            <div class="roles-container" style="color:orange">
-                <h1 class="role">Boost Sales</h1>
-                <h1 class="role">Build More</h1>
-                <h1 class="role">Grow Faster</h1>
-                <h1 class="role">Earn Bigger</h1>
-            </div>
+
+<!-- ── HERO ── -->
+<div class="hero-section reveal">
+    <div class="hero-eyebrow">Print-on-demand platform #1 Indonesia</div>
+    <div class="text-changer">
+        <h1 class="intro-text">Gomart helps you</h1>
+        <div class="roles-container">
+            <h1 class="role">Boost Sales</h1>
+            <h1 class="role">Build More</h1>
+            <h1 class="role">Grow Faster</h1>
+            <h1 class="role">Earn Bigger</h1>
         </div>
-        <h2 id="myh2" class="reveal d2">
-            <span style="font-weight:bold">Gomart</span> empowers your business with
-            <span style="font-weight:bold">AI-driven sales</span> tools,
-            <span style="font-weight:bold"><br>real-time analytics</span>, and
-            <span style="font-weight:bold">seamless integrations</span><br>
-            <span style="font-weight:bold">all in one beautiful dashboard</span>
-        </h2>
-        <div class="acount-firstpage reveal d3">
-            <button class="signup">Sign up</button>
-            <button class="demo">Book a demo</button>
-        </div>
-        <br>
     </div>
+    <p>Ciptakan desain terbaikmu bersama Gomart — tanpa perlu stok barang.<br>Semua dalam satu dashboard yang indah.</p>
+    <div class="hero-btns">
+        <button class="btn-hero-primary" id="heroSignupBtn" onclick="window.location.href='signup.html'">Sign Up Free</button>
+        <button class="btn-hero-ghost" onclick="window.location.href='gomart-fixed.html'">Coba Sekarang</button>
+    </div>
+</div>
 
-    <!-- BOXES -->
-    <div class="container reveal">
+<hr class="divider">
 
-        <!-- BOX 1: hover → expand left, show AI chat -->
-        <div class="box" id="box1">
-            <div id="box1-bg"><img src="/images/Black_Handwritten_Organic_Creative_Freelancer_Artist_Logo__5_-removebg-preview.png" alt=""></div>
-            <div class="box-label">Gomart AI</div>
-            <div class="box-content">
-                <div class="ai-box-title"><i class="fa-solid fa-robot" style="margin-right:8px;font-size:18px;"></i>Meet Gumbo</div>
-                <div class="ai-box-name">Your personal AI sales assistant</div>
-                <div class="ai-box-desc">
-                    Ask me anything — from boosting sales and managing stock,<br>
-                    to running promotions and reading your analytics.
+<!-- ── STEPS + VIDEO ── -->
+<div class="steps-video-section reveal">
+    <div class="steps-video-inner">
+        <div class="sv-left">
+            <h2 class="sv-heading">Mulai dengan<br><span>modal $0</span></h2>
+            <div class="sv-steps">
+                <div class="sv-step active" data-step="0" onclick="svActivate(0)">
+                    <div class="sv-num">1</div>
+                    <div class="sv-text">
+                        <div class="sv-title">Pilih produkmu</div>
+                        <div class="sv-desc">Pilih dari ratusan produk berkualitas — kaos, hoodie, celana, jaket, tote bag, dan masih banyak lagi.</div>
+                        <div class="sv-prog"><div class="sv-prog-fill" id="svprog-0"></div></div>
+                    </div>
                 </div>
-                <div class="ai-box-input-row">
-                    <input class="ai-box-input" id="gumboInput"
-                        placeholder="Ask Gumbo anything…"
-                        onkeydown="if(event.key==='Enter') sendGumbo()" onfocus="checkLoginHint()" />
-                    <button class="ai-box-send" onclick="sendGumbo()">Send</button>
+                <div class="sv-step" data-step="1" onclick="svActivate(1)">
+                    <div class="sv-num">2</div>
+                    <div class="sv-text">
+                        <div class="sv-title">Tambahkan desainmu</div>
+                        <div class="sv-desc">Gunakan tool desain gratis kami untuk mengkustomisasi produk print-on-demand sesuai keinginanmu.</div>
+                        <div class="sv-prog"><div class="sv-prog-fill" id="svprog-1"></div></div>
+                    </div>
                 </div>
-                <div class="ai-response" id="gumboResponse">
-                    Hi! I'm Gumbo — How can I help your business today?
+                <div class="sv-step" data-step="2" onclick="svActivate(2)">
+                    <div class="sv-num">3</div>
+                    <div class="sv-text">
+                        <div class="sv-title">Mulai berjualan</div>
+                        <div class="sv-desc">Kamu tentukan margin keuntungan, Gomart urus produksi dan pengiriman langsung ke pembelimu.</div>
+                        <div class="sv-prog"><div class="sv-prog-fill" id="svprog-2"></div></div>
+                    </div>
                 </div>
             </div>
+            <div class="sv-cta">
+                <button class="sv-btn-main" onclick="window.location.href='signup.html'">Mulai Desain Sekarang</button>
+                <button class="sv-btn-link">Pelajari lebih lanjut</button>
+            </div>
         </div>
-
-        <!-- BOX 2: hover → expand right, show stats -->
-        <div class="box" id="box2">
-            <div id="box2-bg"><img src="/images/Black_Handwritten_Organic_Creative_Freelancer_Artist_Logo__3_-removebg-preview.png" alt=""></div>
-            <div class="box-label">Why Gomart</div>
-            <div class="box-content">
-                <div class="info-box-title"> Grow with data</div>
-                <div class="info-box-desc">
-                    Gomart gives you real-time insights, automated reports,
-                    and AI recommendations — so every decision is backed by
-                    data, not guesswork. Join thousands of sellers already growing.
-                </div>
-                <div class="info-stats">
-                    <div class="info-stat">
-                        <div class="info-stat-num">12K+</div>
-                        <div class="info-stat-label">Active Merchants</div>
-                    </div>
-                    <div class="info-stat">
-                        <div class="info-stat-num">3.2x</div>
-                        <div class="info-stat-label">Avg. Sales Growth</div>
-                    </div>
-                    <div class="info-stat">
-                        <div class="info-stat-num">4.9★</div>
-                        <div class="info-stat-label">User Rating</div>
+        <div class="sv-right">
+            <div class="sv-step-badge" id="sv-badge">Langkah 1 dari 3</div>
+            <div class="sv-video-wrap">
+                <video id="sv-video" src="" autoplay loop muted playsinline preload="auto"></video>
+                <div class="sv-video-placeholder" id="sv-placeholder">
+                    <div class="sv-placeholder-icon">🎬</div>
+                    <div class="sv-placeholder-text">
+                        Letakkan video kamu di sini<br>
+                        Ganti <code>src=""</code> dengan path video<br>
+                        <span style="font-size:0.72rem;opacity:0.65;">Contoh: src="video/demo.mp4"</span>
                     </div>
                 </div>
             </div>
         </div>
-
     </div>
+</div>
 
-    <hr style="margin-top:60px">
+<hr class="divider">
 
-    <!-- CAROUSEL / MONEY SECTION -->
-    <div class="money-section reveal">
-        <h2 class="money-title reveal">See what <span>Gomart AI</span> can do for your sales</h2>
-        <p class="money-sub reveal d1">Real results from real merchants — powered by AI insights, automation, and smart integrations.</p>
-
-        <div class="carousel-wrap" id="carouselWrap">
-            <div class="carousel-track" id="carouselTrack">
-                <div class="c-card active" onclick="setActive(0)">
-                    <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&q=80" alt="Sales">
-                    <div class="c-card-label"> Real-time Sales Dashboard</div>
+<!-- ── PRODUCT PICKER ── -->
+<div class="product-section reveal">
+    <div class="product-section-inner">
+        <div class="section-eyebrow">Katalog Produk</div>
+        <h2 class="section-title">Pilih produk di Gomart</h2>
+        <p class="section-sub">Semua produk berkualitas tinggi, siap kamu desain dan jual langsung ke seluruh Indonesia.</p>
+        <div class="product-grid">
+            <button class="prod-btn active" onclick="selectProd(this)">
+                <div class="prod-img-wrap">
+                    <img src="/images/baju.png" alt="T-Shirt" onerror="this.style.display='none';this.parentElement.innerHTML='<span style=\'font-size:2.5rem\'>👕</span>'">
                 </div>
-                <div class="c-card" onclick="setActive(1)">
-                    <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&q=80" alt="Analytics">
-                    <div class="c-card-label"> AI-Powered Analytics</div>
+                <div class="prod-label">T-Shirt</div>
+            </button>
+            <button class="prod-btn" onclick="selectProd(this)">
+                <div class="prod-img-wrap">
+                    <img src="/images/hoodie.png" alt="Hoodie" onerror="this.style.display='none';this.parentElement.innerHTML='<span style=\'font-size:2.5rem\'>🧥</span>'">
                 </div>
-                <div class="c-card" onclick="setActive(2)">
-                    <img src="https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=600&q=80" alt="Inventory">
-                    <div class="c-card-label"> Smart Inventory Alerts</div>
+                <div class="prod-label">Hoodie</div>
+            </button>
+            <button class="prod-btn" onclick="selectProd(this)">
+                <div class="prod-img-wrap">
+                    <img src="/images/sweatshirt.png" alt="Sweatshirt" onerror="this.style.display='none';this.parentElement.innerHTML='<span style=\'font-size:2.5rem\'>🥋</span>'">
                 </div>
-                <div class="c-card" onclick="setActive(3)">
-                    <img src="https://images.unsplash.com/photo-1553729459-efe14ef6055d?w=600&q=80" alt="Revenue">
-                    <div class="c-card-label"> Revenue Optimization</div>
+                <div class="prod-label">Sweatshirt</div>
+            </button>
+            <button class="prod-btn" onclick="selectProd(this)">
+                <div class="prod-img-wrap">
+                    <img src="/images/sport-shirt.png" alt="Sport Shirt" onerror="this.style.display='none';this.parentElement.innerHTML='<span style=\'font-size:2.5rem\'>🎽</span>'">
                 </div>
-                <div class="c-card" onclick="setActive(4)">
-                    <img src="https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=600&q=80" alt="Chat">
-                    <div class="c-card-label"> Auto Reply & CRM</div>
+                <div class="prod-label">Sport Shirt</div>
+            </button>
+            <button class="prod-btn" onclick="selectProd(this)">
+                <div class="prod-img-wrap">
+                    <img src="/images/kid-shirt.png" alt="Kid Shirt" onerror="this.style.display='none';this.parentElement.innerHTML='<span style=\'font-size:2.5rem\'>🌟</span>'">
                 </div>
-                <div class="c-card" onclick="setActive(5)">
-                    <img src="https://images.unsplash.com/photo-1614028674026-a65e31bfd27c?w=600&q=80" alt="Integrations">
-                    <div class="c-card-label"> Marketplace Integrations</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="carousel-dots" id="carouselDots"></div>
-        <div class="carousel-arrows">
-            <button class="c-arrow" onclick="moveCarousel(-1)">←</button>
-            <button class="c-arrow" onclick="moveCarousel(1)">→</button>
-        </div>
-    </div>
-
-
-
-
-    <!-- ══ VIDEO SECTION ══ -->
-    <div class="video-section reveal">
-        <div class="video-label reveal">See It Live</div>
-        <h2 class="video-title reveal d1">Watch Gomart in action</h2>
-        <p class="video-sub reveal d2">See how Gomart AI turns your store data into real growth — in under 3 minutes.</p>
-        <div class="video-frame reveal d3" onclick="this.querySelector('video').play(); this.querySelector('.play-overlay').style.display='none'">
-            <video src="#" preload="none"></video>
-            <div class="play-overlay">
-                <div class="play-btn-circle"><i class="fa-solid fa-play" style="font-size:20px;margin-left:3px;"></i></div>
-            </div>
+                <div class="prod-label">Kid Shirt</div>
+            </button>
         </div>
     </div>
+</div>
 
-    <hr style="border:none;border-top:1.5px solid #f0f0f0;margin:0 60px">
+<hr class="divider">
 
-    <!-- ══ PRICING ══ -->
-    <div class="pricing-section">
-        <div class="pricing-header">
-            <div class="pricing-label reveal">Pricing</div>
-            <h2 class="pricing-title reveal d1">Simple, transparent pricing</h2>
-            <p class="pricing-sub reveal d2">Start free. Scale as you grow. No hidden fees.</p>
+<!-- ── INTEGRATIONS ── -->
+<div class="integrations-section reveal">
+    <div class="integrations-inner">
+        <div class="integrations-top">
+            <div>
+                <div class="section-eyebrow">Integrasi Platform</div>
+                <div class="integrations-headline">
+                    Connect<br>
+                    <span class="line2">everywhere</span>
+                    <span class="line3">sell anywhere.</span>
+                </div>
+            </div>
+            <div class="integrations-tagline">
+                Satu dashboard untuk semua platform jualan. Gomart terhubung langsung ke marketplace favoritmu tanpa ribet.
+                <div class="stats-row">
+                    <div class="stat-item"><div class="stat-num">3</div><div class="stat-label">Platform terintegrasi</div></div>
+                </div>
+            </div>
         </div>
-        <div class="plans-grid reveal">
 
-            <!-- Starter -->
-            <div class="plan-card reveal d1">
-                <div class="plan-name">Starter</div>
-                <div class="plan-price"><sup>$</sup>49</div>
-                <div class="plan-period">per month</div>
-                <ul class="plan-features">
-                    <li>Up to 500 orders / month</li>
-                    <li>Basic analytics dashboard</li>
-                    <li>2 marketplace integrations</li>
-                    <li>Email support</li>
-                    <li class="no">AI Sales Assistant</li>
-                    <li class="no">Auto Reply</li>
-                </ul>
-                <button class="btn-plan" onclick="window.location.href='signup.html'">Get Started</button>
+        <!-- ── SCROLLING LOGO ROW — 3 platform, large, looping ── -->
+        <div class="logo-scroll-wrap">
+            <div class="logo-track" id="logoTrack">
+
+                <div class="logo-pill">
+                    <img class="lp-icon" src="/images/logos/shopee.png" alt="Shopee">
+                    Shopee
+                </div>
+                <div class="logo-pill">
+                    <img class="lp-icon" src="/images/logos/tokopedia.png" alt="Tokopedia">
+                    Tokopedia
+                </div>
+                <div class="logo-pill">
+                    <img class="lp-icon" src="/images/logos/lazada.png" alt="Lazada">
+                    Lazada
+                </div>
+
+                <!-- duplicate 1 -->
+                <div class="logo-pill">
+                    <img class="lp-icon" src="/images/logos/shopee.png" alt="Shopee">
+                    Shopee
+                </div>
+                <div class="logo-pill">
+                    <img class="lp-icon" src="/images/logos/tokopedia.png" alt="Tokopedia">
+                    Tokopedia
+                </div>
+                <div class="logo-pill">
+                    <img class="lp-icon" src="/images/logos/lazada.png" alt="Lazada">
+                    Lazada
+                </div>
+
+                <!-- duplicate 2 -->
+                <div class="logo-pill">
+                    <img class="lp-icon" src="/images/logos/shopee.png" alt="Shopee">
+                    Shopee
+                </div>
+                <div class="logo-pill">
+                    <img class="lp-icon" src="/images/logos/tokopedia.png" alt="Tokopedia">
+                    Tokopedia
+                </div>
+                <div class="logo-pill">
+                    <img class="lp-icon" src="/images/logos/lazada.png" alt="Lazada">
+                    Lazada
+                </div>
+
+                <!-- duplicate 3 (for seamless -50% loop) -->
+                <div class="logo-pill">
+                    <img class="lp-icon" src="/images/logos/shopee.png" alt="Shopee">
+                    Shopee
+                </div>
+                <div class="logo-pill">
+                    <img class="lp-icon" src="/images/logos/tokopedia.png" alt="Tokopedia">
+                    Tokopedia
+                </div>
+                <div class="logo-pill">
+                    <img class="lp-icon" src="/images/logos/lazada.png" alt="Lazada">
+                    Lazada
+                </div>
+
+                <!-- duplicate 4 (for seamless -50% loop) -->
+                <div class="logo-pill">
+                    <img class="lp-icon" src="/images/logos/shopee.png" alt="Shopee">
+                    Shopee
+                </div>
+                <div class="logo-pill">
+                    <img class="lp-icon" src="/images/logos/tokopedia.png" alt="Tokopedia">
+                    Tokopedia
+                </div>
+                <div class="logo-pill">
+                    <img class="lp-icon" src="/images/logos/lazada.png" alt="Lazada">
+                    Lazada
+                </div>
+
+                <!-- duplicate 5 (for seamless -50% loop) -->
+                <div class="logo-pill">
+                    <img class="lp-icon" src="/images/logos/shopee.png" alt="Shopee">
+                    Shopee
+                </div>
+                <div class="logo-pill">
+                    <img class="lp-icon" src="/images/logos/tokopedia.png" alt="Tokopedia">
+                    Tokopedia
+                </div>
+                <div class="logo-pill">
+                    <img class="lp-icon" src="/images/logos/lazada.png" alt="Lazada">
+                    Lazada
+                </div>
+
+                <!-- duplicate 6 (mirror set, -50% point) -->
+                <div class="logo-pill">
+                    <img class="lp-icon" src="/images/logos/shopee.png" alt="Shopee">
+                    Shopee
+                </div>
+                <div class="logo-pill">
+                    <img class="lp-icon" src="/images/logos/tokopedia.png" alt="Tokopedia">
+                    Tokopedia
+                </div>
+                <div class="logo-pill">
+                    <img class="lp-icon" src="/images/logos/lazada.png" alt="Lazada">
+                    Lazada
+                </div>
+
             </div>
-
-            <!-- Growth -->
-            <div class="plan-card reveal d2">
-                <div class="plan-name">Growth</div>
-                <div class="plan-price"><sup>$</sup>149</div>
-                <div class="plan-period">per month</div>
-                <ul class="plan-features">
-                    <li>Up to 5,000 orders / month</li>
-                    <li>Advanced analytics + reports</li>
-                    <li>10 marketplace integrations</li>
-                    <li>Priority support</li>
-                    <li>AI Sales Assistant (Gumbo)</li>
-                    <li>Auto Reply & CRM</li>
-                </ul>
-                <button class="btn-plan" onclick="window.location.href='signup.html'">Get Started</button>
-            </div>
-
-            <!-- Enterprise -->
-            <div class="plan-card reveal d3">
-                <div class="plan-name">Enterprise</div>
-                <div class="plan-price"><sup>$</sup>399</div>
-                <div class="plan-period">per month</div>
-                <ul class="plan-features">
-                    <li>Unlimited orders</li>
-                    <li>Custom reports & exports</li>
-                    <li>Unlimited integrations</li>
-                    <li>Dedicated account manager</li>
-                    <li>AI Sales Assistant (Gumbo)</li>
-                    <li>White-label option</li>
-                </ul>
-                <button class="btn-plan" onclick="window.location.href='signup.html'">Get Started</button>
-            </div>
-
         </div>
     </div>
+</div>
 
-    <hr style="border:none;border-top:1.5px solid #f0f0f0;margin:0 60px">
+<hr class="divider">
 
-    <!-- ══ WHY GOMART ══ -->
-    <div class="why-section">
-        <div class="why-header">
-            <div class="why-label reveal">Why Gomart</div>
-            <h2 class="why-title reveal d1">Everything you need to sell smarter</h2>
-            <p class="why-sub reveal d2">Built for Indonesian sellers. Trusted by 12,000+ merchants.</p>
-        </div>
-
+<!-- ── WHY GOMART ── -->
+<div class="why-section reveal">
+    <div class="why-inner">
+        <div class="section-eyebrow">Why Gomart</div>
+        <h2 class="section-title">Everything you need to sell smarter</h2>
+        <p class="section-sub" style="margin-bottom:0;">Built for Indonesian sellers. Trusted by 12,000+ merchants.</p>
         <div class="why-grid">
-            <div class="why-card reveal d1">
-                <div class="why-icon"><i class="fa-solid fa-chart-line"></i></div>
-                <h3>Real-time Analytics</h3>
-                <p>See your sales, traffic, and conversions live. No more waiting for reports — act on data instantly.</p>
-            </div>
-            <div class="why-card reveal d2">
-                <div class="why-icon"><i class="fa-solid fa-robot"></i></div>
-                <h3>AI Sales Assistant</h3>
-                <p>Gumbo — your AI partner — answers customer queries, suggests promotions, and forecasts your next bestseller.</p>
-            </div>
-            <div class="why-card reveal d3">
-                <div class="why-icon"><i class="fa-solid fa-plug"></i></div>
-                <h3>One-Click Integrations</h3>
-                <p>Connect Shopee, Tokopedia, Lazada, TikTok Shop and 20+ more platforms in seconds.</p>
-            </div>
-            <div class="why-card reveal d4">
-                <div class="why-icon"><i class="fa-solid fa-comments"></i></div>
-                <h3>Auto Reply & CRM</h3>
-                <p>Never miss a customer message. Gomart auto-replies on all platforms 24/7 in natural language.</p>
-            </div>
-            <div class="why-card reveal d5">
-                <div class="why-icon"><i class="fa-solid fa-boxes-stacked"></i></div>
-                <h3>Smart Inventory</h3>
-                <p>Get alerts before stock runs out. Set auto-reorder points and let Gomart handle the rest.</p>
-            </div>
-            <div class="why-card reveal d6">
-                <div class="why-icon"><i class="fa-solid fa-shield-halved"></i></div>
-                <h3>Bank-Grade Security</h3>
-                <p>AES-256 encryption, TLS 1.3, and SOC 2 Type II. Your business data is always protected.</p>
-            </div>
+            <div class="why-card reveal d1"><div class="why-icon"><i class="fa-solid fa-chart-line"></i></div><h3>Real-time Analytics</h3><p>See your sales, traffic, and conversions live. Act on data instantly.</p></div>
+            <div class="why-card reveal d2"><div class="why-icon"><i class="fa-solid fa-robot"></i></div><h3>AI Sales Assistant</h3><p>Gumbo answers customer queries, suggests promotions, and forecasts your next bestseller.</p></div>
+            <div class="why-card reveal d3"><div class="why-icon"><i class="fa-solid fa-plug"></i></div><h3>One-Click Integrations</h3><p>Connect Shopee, Tokopedia, Lazada, TikTok Shop and 20+ more in seconds.</p></div>
+            <div class="why-card reveal d4"><div class="why-icon"><i class="fa-solid fa-comments"></i></div><h3>Auto Reply & CRM</h3><p>Never miss a customer message. Gomart auto-replies on all platforms 24/7.</p></div>
+            <div class="why-card reveal d5"><div class="why-icon"><i class="fa-solid fa-boxes-stacked"></i></div><h3>Smart Inventory</h3><p>Get alerts before stock runs out. Set auto-reorder points effortlessly.</p></div>
+            <div class="why-card reveal d6"><div class="why-icon"><i class="fa-solid fa-shield-halved"></i></div><h3>Bank-Grade Security</h3><p>AES-256 encryption, TLS 1.3, and SOC 2 Type II. Always protected.</p></div>
         </div>
+    </div>
+</div>
 
-        <!-- FAQ -->
-        <div class="faq-wrap">
-            <h3 class="faq-title">Frequently asked questions</h3>
+<hr class="divider">
 
-            <div class="faq-item reveal d1" onclick="toggleFaq(this)">
-                <div class="faq-q">Is there a free trial? <div class="faq-icon">+</div></div>
-                <div class="faq-a">Yes! All plans include a 14-day free trial with no credit card required. You can cancel anytime.</div>
+<!-- ── FAQ ── -->
+<div class="faq-section reveal">
+    <div class="faq-inner">
+        <div class="faq-left">
+            <div class="section-eyebrow">FAQ</div>
+            <h2>Frequently asked questions</h2>
+            <p style="margin-top:0.75rem;">Punya pertanyaan lain? Hubungi tim kami kapan saja.</p>
+        </div>
+        <div class="faq-list">
+            <div class="faq-item reveal d1" onclick="toggleFaq(this)"><div class="faq-q">Is there a free trial? <div class="faq-icon">+</div></div><div class="faq-a">Yes! All plans include a 14-day free trial with no credit card required. Cancel anytime.</div></div>
+            <div class="faq-item reveal d2" onclick="toggleFaq(this)"><div class="faq-q">Which marketplaces does Gomart connect to? <div class="faq-icon">+</div></div><div class="faq-a">Gomart integrates with Shopee, Tokopedia, Lazada, TikTok Shop, WooCommerce, Shopify, and 15+ more.</div></div>
+            <div class="faq-item reveal d3" onclick="toggleFaq(this)"><div class="faq-q">How does the AI assistant work? <div class="faq-icon">+</div></div><div class="faq-a">Gumbo reads your sales history, inventory, and customer data to give personalized advice.</div></div>
+            <div class="faq-item reveal d4" onclick="toggleFaq(this)"><div class="faq-q">Can I upgrade or downgrade my plan? <div class="faq-icon">+</div></div><div class="faq-a">Absolutely. Change your plan anytime from your dashboard. Changes take effect next billing cycle.</div></div>
+            <div class="faq-item reveal d5" onclick="toggleFaq(this)"><div class="faq-q">How long does setup take? <div class="faq-icon">+</div></div><div class="faq-a">Most sellers are fully connected and running within 5 minutes.</div></div>
+        </div>
+    </div>
+</div>
+
+<!-- ── CTA FINAL ── -->
+<div class="cta-final">
+
+    <!-- Memphis pattern background -->
+    <div class="cta-final-bg">
+        <svg viewBox="0 0 700 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+            <rect width="700" height="900" fill="#fff8f0"/>
+            <circle cx="80" cy="80" r="55" fill="none" stroke="#f9a825" stroke-width="5"/>
+            <circle cx="620" cy="150" r="70" fill="none" stroke="#e65c00" stroke-width="4"/>
+            <circle cx="350" cy="820" r="90" fill="none" stroke="#f9a825" stroke-width="6"/>
+            <circle cx="650" cy="750" r="45" fill="none" stroke="#e65c00" stroke-width="3.5"/>
+            <circle cx="30"  cy="500" r="60" fill="none" stroke="#f9a825" stroke-width="4"/>
+            <circle cx="160" cy="200" r="14" fill="#f9a825"/>
+            <circle cx="540" cy="310" r="10" fill="#e65c00"/>
+            <circle cx="420" cy="660" r="18" fill="#f9a825" opacity=".6"/>
+            <circle cx="90"  cy="720" r="12" fill="#e65c00"/>
+            <circle cx="620" cy="500" r="22" fill="#f9a825" opacity=".5"/>
+            <circle cx="280" cy="120" r="8"  fill="#e65c00"/>
+            <circle cx="480" cy="80"  r="16" fill="#f9a825" opacity=".7"/>
+            <circle cx="70"  cy="340" r="10" fill="#e65c00" opacity=".6"/>
+            <circle cx="650" cy="620" r="14" fill="#f9a825"/>
+            <polygon points="200,60 240,130 160,130" fill="none" stroke="#e65c00" stroke-width="4"/>
+            <polygon points="580,400 620,460 540,460" fill="#f9a825" opacity=".5"/>
+            <polygon points="100,600 140,550 180,600" fill="none" stroke="#f9a825" stroke-width="4"/>
+            <polygon points="440,200 480,140 520,200" fill="#e65c00" opacity=".4"/>
+            <polygon points="300,700 340,760 260,760" fill="none" stroke="#e65c00" stroke-width="3"/>
+            <polygon points="600,820 640,770 680,820" fill="#f9a825" opacity=".6"/>
+            <polygon points="50,150 90,90  130,150" fill="#e65c00" opacity=".3"/>
+            <rect x="500" y="60"  width="60" height="60" fill="none" stroke="#f9a825" stroke-width="4" transform="rotate(15 530 90)"/>
+            <rect x="180" y="750" width="50" height="50" fill="#f9a825" opacity=".4" transform="rotate(-10 205 775)"/>
+            <rect x="580" y="280" width="40" height="40" fill="none" stroke="#e65c00" stroke-width="3.5" transform="rotate(25 600 300)"/>
+            <rect x="30"  y="400" width="36" height="36" fill="#e65c00" opacity=".3" transform="rotate(20 48 418)"/>
+            <rect x="300" y="500" width="55" height="55" fill="none" stroke="#f9a825" stroke-width="4" transform="rotate(-20 327 527)"/>
+            <rect x="640" y="680" width="44" height="44" fill="#f9a825" opacity=".5" transform="rotate(30 662 702)"/>
+            <polyline points="120,280 145,310 120,340 145,370 120,400" fill="none" stroke="#f9a825" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+            <polyline points="650,380 675,410 650,440 675,470 650,500" fill="none" stroke="#e65c00" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+            <polyline points="350,40  375,70  350,100 375,130 350,160" fill="none" stroke="#e65c00" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M0,250 Q87,220 175,250 Q262,280 350,250 Q437,220 525,250 Q612,280 700,250" fill="none" stroke="#f9a825" stroke-width="3" opacity=".5"/>
+            <path d="M0,450 Q87,420 175,450 Q262,480 350,450 Q437,420 525,450 Q612,480 700,450" fill="none" stroke="#e65c00" stroke-width="3" opacity=".45"/>
+            <path d="M0,650 Q87,620 175,650 Q262,680 350,650 Q437,620 525,650 Q612,680 700,650" fill="none" stroke="#f9a825" stroke-width="2.5" opacity=".4"/>
+            <circle cx="240" cy="320" r="5" fill="#e65c00" opacity=".6"/><circle cx="270" cy="320" r="5" fill="#e65c00" opacity=".6"/><circle cx="300" cy="320" r="5" fill="#e65c00" opacity=".6"/>
+            <circle cx="240" cy="350" r="5" fill="#f9a825" opacity=".5"/><circle cx="270" cy="350" r="5" fill="#f9a825" opacity=".5"/><circle cx="300" cy="350" r="5" fill="#f9a825" opacity=".5"/>
+            <circle cx="240" cy="380" r="5" fill="#e65c00" opacity=".4"/><circle cx="270" cy="380" r="5" fill="#e65c00" opacity=".4"/><circle cx="300" cy="380" r="5" fill="#e65c00" opacity=".4"/>
+            <circle cx="440" cy="540" r="5" fill="#f9a825" opacity=".6"/><circle cx="470" cy="540" r="5" fill="#f9a825" opacity=".6"/><circle cx="500" cy="540" r="5" fill="#f9a825" opacity=".6"/>
+            <circle cx="440" cy="570" r="5" fill="#e65c00" opacity=".5"/><circle cx="470" cy="570" r="5" fill="#e65c00" opacity=".5"/><circle cx="500" cy="570" r="5" fill="#e65c00" opacity=".5"/>
+            <path d="M380,290 Q400,270 420,290 Q440,310 460,290 Q480,270 500,290" fill="none" stroke="#e65c00" stroke-width="3.5" stroke-linecap="round"/>
+            <path d="M150,460 Q170,440 190,460 Q210,480 230,460 Q250,440 270,460" fill="none" stroke="#f9a825" stroke-width="3" stroke-linecap="round"/>
+            <path d="M400,720 Q420,700 440,720 Q460,740 480,720 Q500,700 520,720" fill="none" stroke="#e65c00" stroke-width="3" stroke-linecap="round"/>
+            <path d="M80,830 Q100,810 120,830 Q140,850 160,830 Q180,810 200,830" fill="none" stroke="#f9a825" stroke-width="3" stroke-linecap="round"/>
+            <path d="M580,570 A50,50 0 0,1 680,570" fill="none" stroke="#f9a825" stroke-width="5"/>
+            <path d="M150,880 A45,45 0 0,1 240,880" fill="none" stroke="#e65c00" stroke-width="5"/>
+            <path d="M320,200 A35,35 0 0,0 390,200" fill="none" stroke="#f9a825" stroke-width="4"/>
+            <g transform="translate(490,420)" stroke="#f9a825" stroke-width="3.5" stroke-linecap="round"><line x1="-16" y1="0" x2="16" y2="0"/><line x1="0" y1="-16" x2="0" y2="16"/><line x1="-11" y1="-11" x2="11" y2="11"/><line x1="11" y1="-11" x2="-11" y2="11"/></g>
+            <g transform="translate(200,580)" stroke="#e65c00" stroke-width="3" stroke-linecap="round"><line x1="-13" y1="0" x2="13" y2="0"/><line x1="0" y1="-13" x2="0" y2="13"/><line x1="-9" y1="-9" x2="9" y2="9"/><line x1="9" y1="-9" x2="-9" y2="9"/></g>
+            <g transform="translate(360,850)" stroke="#f9a825" stroke-width="3" stroke-linecap="round"><line x1="-12" y1="0" x2="12" y2="0"/><line x1="0" y1="-12" x2="0" y2="12"/><line x1="-8" y1="-8" x2="8" y2="8"/><line x1="8" y1="-8" x2="-8" y2="8"/></g>
+            <g transform="translate(670,240)" stroke="#e65c00" stroke-width="3.5" stroke-linecap="round"><line x1="-14" y1="0" x2="14" y2="0"/><line x1="0" y1="-14" x2="0" y2="14"/><line x1="-10" y1="-10" x2="10" y2="10"/><line x1="10" y1="-10" x2="-10" y2="10"/></g>
+            <polygon points="340,420 360,440 340,460 320,440" fill="none" stroke="#e65c00" stroke-width="3.5"/>
+            <polygon points="560,700 580,720 560,740 540,720" fill="#f9a825" opacity=".5"/>
+            <polygon points="140,100 155,115 140,130 125,115" fill="none" stroke="#f9a825" stroke-width="3"/>
+            <g transform="translate(420,780)" stroke="#f9a825" stroke-width="5" stroke-linecap="round"><line x1="-18" y1="0" x2="18" y2="0"/><line x1="0" y1="-18" x2="0" y2="18"/></g>
+            <g transform="translate(660,340)" stroke="#e65c00" stroke-width="4" stroke-linecap="round"><line x1="-14" y1="0" x2="14" y2="0"/><line x1="0" y1="-14" x2="0" y2="14"/></g>
+            <g transform="translate(250,760)" stroke="#e65c00" stroke-width="4" stroke-linecap="round"><line x1="-12" y1="0" x2="12" y2="0"/><line x1="0" y1="-12" x2="0" y2="12"/></g>
+            <circle cx="350" cy="450" r="120" fill="#f9a825" opacity=".04"/>
+            <circle cx="600" cy="200" r="100" fill="#e65c00" opacity=".04"/>
+            <circle cx="100" cy="700" r="130" fill="#f9a825" opacity=".04"/>
+            <line x1="550" y1="180" x2="700" y2="180" stroke="#e65c00" stroke-width="3" opacity=".4"/>
+            <line x1="550" y1="195" x2="700" y2="195" stroke="#e65c00" stroke-width="3" opacity=".3"/>
+            <line x1="550" y1="210" x2="700" y2="210" stroke="#e65c00" stroke-width="3" opacity=".2"/>
+            <line x1="0" y1="780" x2="130" y2="780" stroke="#f9a825" stroke-width="3" opacity=".4"/>
+            <line x1="0" y1="795" x2="130" y2="795" stroke="#f9a825" stroke-width="3" opacity=".3"/>
+            <line x1="0" y1="810" x2="130" y2="810" stroke="#f9a825" stroke-width="3" opacity=".2"/>
+        </svg>
+    </div>
+
+    <div class="cta-final-left reveal">
+        <div class="cta-eyebrow">Mulai sekarang</div>
+        <h2>Desain.<br>Upload.<br><span>Jual.</span></h2>
+        <p>Bergabung dengan 12.000+ seller yang sudah sukses bersama Gomart. Gratis selamanya, tanpa modal stok barang.</p>
+        <div class="cta-btn-row">
+            <button class="btn-cta-orange" onclick="window.location.href='signup.html'">Mulai Desain Sekarang →</button>
+            <button class="btn-cta-outline" onclick="window.location.href='gomart-fixed.html'">Lihat Demo</button>
+        </div>
+    </div>
+    <!--
+    <div class="cta-final-right reveal d2">
+        <div class="cta-product-preview">
+            <div class="cta-prod-card">
+                <img class="cta-prod-img" src="/images/baju.png" alt="T-Shirt" >
+                <div class="cta-prod-name">T-Shirt</div>
+                <div class="cta-prod-price">Dari Rp 85.000</div>
             </div>
-            <div class="faq-item reveal d2" onclick="toggleFaq(this)">
-                <div class="faq-q">Which marketplaces does Gomart connect to? <div class="faq-icon">+</div></div>
-                <div class="faq-a">Gomart integrates with Shopee, Tokopedia, Lazada, TikTok Shop, WooCommerce, Shopify, and 15+ more platforms.</div>
+            <div class="cta-prod-card">
+                <img class="cta-prod-img" src="/images/hoodie.png" alt="Hoodie" onerror="this.innerHTML='🧥';this.style.fontSize='2.5rem'">
+                <div class="cta-prod-name">Hoodie</div>
+                <div class="cta-prod-price">Dari Rp 145.000</div>
             </div>
-            <div class="faq-item reveal d3" onclick="toggleFaq(this)">
-                <div class="faq-q">How does the AI assistant work? <div class="faq-icon">+</div></div>
-                <div class="faq-a">Gumbo is trained on e-commerce data and connected to your store. It reads your sales history, inventory, and customer data to give personalized advice.</div>
+            <div class="cta-prod-card">
+                <img class="cta-prod-img" src="/images/products/sweatshirt.png" alt="Sweatshirt" onerror="this.innerHTML='🥋';this.style.fontSize='2.5rem'">
+                <div class="cta-prod-name">Sweatshirt</div>
+                <div class="cta-prod-price">Dari Rp 120.000</div>
             </div>
-            <div class="faq-item reveal d4" onclick="toggleFaq(this)">
-                <div class="faq-q">Can I upgrade or downgrade my plan? <div class="faq-icon">+</div></div>
-                <div class="faq-a">Absolutely. You can change your plan at any time from your dashboard. Changes take effect at the start of your next billing cycle.</div>
-            </div>
-            <div class="faq-item reveal d5" onclick="toggleFaq(this)">
-                <div class="faq-q">Is my business data safe? <div class="faq-icon">+</div></div>
-                <div class="faq-a">Yes. We use AES-256 encryption at rest and TLS 1.3 in transit. Gomart is SOC 2 Type II certified and never sells your data to third parties.</div>
-            </div>
-            <div class="faq-item reveal d6" onclick="toggleFaq(this)">
-                <div class="faq-q">How long does setup take? <div class="faq-icon">+</div></div>
-                <div class="faq-a">Most sellers are fully connected and running within 5 minutes. Just sign up, connect your store, and Gomart starts analyzing your data immediately.</div>
+            <div class="cta-prod-card">
+                <img class="cta-prod-img" src="/images/products/sport-shirt.png" alt="Sport Shirt" onerror="this.innerHTML='🎽';this.style.fontSize='2.5rem'">
+                <div class="cta-prod-name">Sport Shirt</div>
+                <div class="cta-prod-price">Dari Rp 95.000</div>
             </div>
         </div>
     </div>
+-->
+</div>
 
 </main>
+
+<!-- ── FOOTER ── -->
 <footer>
     <div class="footer-grid">
         <div class="footer-brand">
             <img src="/images/logo-text.png" alt="Gomart" onerror="this.style.display='none'">
             <p>Gomart helps thousands of sellers grow their business with AI-powered tools — built for Indonesia.</p>
         </div>
-        <div class="footer-col">
-            <h4>Product</h4>
-            <a href="#">Features</a>
-            <a href="#">Pricing</a>
-            <a href="#">Integrations</a>
-            <a href="#">Changelog</a>
-        </div>
-        <div class="footer-col">
-            <h4>Company</h4>
-            <a href="#">About Us</a>
-            <a href="#">Blog</a>
-            <a href="#">Careers</a>
-            <a href="#">Contact</a>
-        </div>
-        <div class="footer-col">
-            <h4>Support</h4>
-            <a href="#">Help Center</a>
-            <a href="#">Privacy Policy</a>
-            <a href="#">Terms of Service</a>
-            <a href="#">Status</a>
-        </div>
+        <div class="footer-col"><h4>Product</h4><a href="#">Features</a><a href="#">Pricing</a><a href="#">Integrations</a><a href="#">Changelog</a></div>
+        <div class="footer-col"><h4>Company</h4><a href="#">About Us</a><a href="#">Blog</a><a href="#">Careers</a><a href="#">Contact</a></div>
+        <div class="footer-col"><h4>Support</h4><a href="#">Help Center</a><a href="#">Privacy Policy</a><a href="#">Terms of Service</a><a href="#">Status</a></div>
     </div>
     <div class="footer-bottom">
         <p>&copy; 2026 Gomart. All rights reserved. Made with love in Indonesia.</p>
         <div class="footer-socials">
             <a href="#" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
-            <a href="#" title="Twitter / X"><i class="fa-brands fa-x-twitter"></i></a>
+            <a href="#" title="X"><i class="fa-brands fa-x-twitter"></i></a>
             <a href="#" title="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
             <a href="#" title="TikTok"><i class="fa-brands fa-tiktok"></i></a>
         </div>
@@ -1057,111 +862,74 @@ footer {
 </footer>
 
 <script>
-/* ══ GUMBO AI ══ */
-function checkLoginHint() {
-    if (!isLoggedIn()) {
-        const resp = document.getElementById('gumboResponse');
-        resp.innerHTML = 'Please <a href="Signin.html" style="color:orange;font-weight:bold;text-decoration:underline;">sign in</a> to chat with Gumbo.';
-    }
+/* ── STEPS VIDEO ── */
+const SV_STEPS = [{badge:'Langkah 1 dari 3'},{badge:'Langkah 2 dari 3'},{badge:'Langkah 3 dari 3'}];
+let svCurrent = 0, svAutoTimer = null;
+const SV_DUR = 8000;
+
+function svActivate(idx) {
+    clearTimeout(svAutoTimer);
+    document.querySelectorAll('.sv-step').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.sv-prog-fill').forEach(el => { el.style.transition = 'none'; el.style.width = '0%'; });
+    svCurrent = idx;
+    const stepEl = document.querySelector('[data-step="' + idx + '"]');
+    if (stepEl) stepEl.classList.add('active');
+    document.getElementById('sv-badge').textContent = SV_STEPS[idx].badge;
+    const fill = document.getElementById('svprog-' + idx);
+    if (fill) requestAnimationFrame(() => { fill.style.transition = 'width ' + SV_DUR + 'ms linear'; fill.style.width = '100%'; });
+    svAutoTimer = setTimeout(() => svActivate((svCurrent + 1) % SV_STEPS.length), SV_DUR);
 }
 
-/* Simulate login state — change to true after user logs in */
-/* In real app: check localStorage/session cookie */
-function isLoggedIn() {
-    return localStorage.getItem('gomart_user') !== null;
-}
+const svVideo = document.getElementById('sv-video');
+const svPh = document.getElementById('sv-placeholder');
+if (svVideo && svVideo.getAttribute('src') && svVideo.getAttribute('src').trim() !== '') {
+    svPh.style.display = 'none'; svVideo.play().catch(() => {});
+} else { svVideo.style.display = 'none'; }
 
-async function sendGumbo() {
-    const input = document.getElementById('gumboInput');
-    const resp  = document.getElementById('gumboResponse');
-    const msg   = input.value.trim();
-    if (!msg) return;
-
-    /* ── LOGIN CHECK ── */
-    if (!isLoggedIn()) {
-        resp.innerHTML = 'You need an account to chat with Gumbo. <a href="Signin.html" style="color:orange;font-weight:bold;text-decoration:underline;">Sign in here →</a>';
-        input.value = '';
-        return;
-    }
-
-    input.value = '';
-    resp.textContent = 'Gumbo is thinking…';
-    try {
-        const res = await fetch('https://api.anthropic.com/v1/messages', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                model: 'claude-sonnet-4-20250514',
-                max_tokens: 1000,
-                system: 'You are Gumbo, a friendly AI sales assistant for Gomart — an e-commerce platform for Indonesian sellers. Help with sales strategy, inventory, promotions, and growth. Be warm, concise, max 60 words.',
-                messages: [{ role: 'user', content: msg }]
-            })
-        });
-        const data = await res.json();
-        resp.textContent = data.content?.find(c => c.type === 'text')?.text || 'Sorry, try again!';
-    } catch(e) {
-        resp.textContent = "Can't connect right now  Try again in a moment!";
-    }
-}
-
-/* ══ CAROUSEL ══ */
-const cards   = Array.from(document.querySelectorAll('.c-card'));
-const dotsEl  = document.getElementById('carouselDots');
-const wrap    = document.getElementById('carouselWrap');
-let activeIdx = 0;
-
-/* build dots */
-cards.forEach((_, i) => {
-    const d = document.createElement('div');
-    d.className = 'c-dot' + (i === 0 ? ' active' : '');
-    d.onclick = () => setActive(i);
-    dotsEl.appendChild(d);
+svActivate(0);
+document.querySelectorAll('.sv-step').forEach(el => {
+    el.addEventListener('click', () => { clearTimeout(svAutoTimer); svAutoTimer = setTimeout(() => svActivate(svCurrent), 15000); });
 });
 
-function setActive(idx) {
-    cards[activeIdx].classList.remove('active');
-    dotsEl.children[activeIdx].classList.remove('active');
-    activeIdx = idx;
-    cards[activeIdx].classList.add('active');
-    dotsEl.children[activeIdx].classList.add('active');
-    /* scroll active into center */
-    cards[activeIdx].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+/* ── PRODUCT PICKER ── */
+function selectProd(btn) {
+    document.querySelectorAll('.prod-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
 }
 
-function moveCarousel(dir) {
-    setActive((activeIdx + dir + cards.length) % cards.length);
-}
-
-/* drag scroll */
-let drag = false, startX = 0, scrollStart = 0;
-const track = document.getElementById('carouselTrack');
-track.addEventListener('mousedown', e => {
-    drag = true; startX = e.pageX; scrollStart = wrap.scrollLeft;
-    track.style.userSelect = 'none';
-});
-document.addEventListener('mouseup', () => { drag = false; track.style.userSelect = ''; });
-document.addEventListener('mousemove', e => {
-    if (!drag) return;
-    wrap.scrollLeft = scrollStart - (e.pageX - startX);
-});
-
+/* ── FAQ ── */
 function toggleFaq(item) {
-    const isOpen = item.classList.contains('open');
+    const open = item.classList.contains('open');
     document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
-    if (!isOpen) item.classList.add('open');
+    if (!open) item.classList.add('open');
 }
 
-/* ══ SCROLL REVEAL OBSERVER ══ */
-const revealEls = document.querySelectorAll('.reveal, .reveal-left, .reveal-right');
-const revealObs = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-        if (e.isIntersecting) {
-            e.target.classList.add('visible');
-            revealObs.unobserve(e.target);
-        }
-    });
-}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
-revealEls.forEach(el => revealObs.observe(el));
+/* ── SCROLL REVEAL ── */
+const revEls = document.querySelectorAll('.reveal');
+const revObs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); revObs.unobserve(e.target); } });
+}, { threshold: 0.08, rootMargin: '0px 0px -36px 0px' });
+revEls.forEach(el => revObs.observe(el));
+
+/* ── AUTH ── */
+function getUser() { try { return JSON.parse(localStorage.getItem('gomart_user')); } catch { return null; } }
+function initAuth() {
+    const user = getUser();
+    const guest = document.getElementById('guestBtns');
+    const pw = document.getElementById('profileWrap');
+    if (user && user.email) {
+        guest.style.display = 'none'; pw.style.display = 'block';
+        document.getElementById('profileEmail').textContent = user.email;
+        document.getElementById('profileInitial').textContent = user.email.charAt(0).toUpperCase();
+        document.getElementById('pdEmail').textContent = user.email;
+        const hb = document.getElementById('heroSignupBtn');
+        if (hb) { hb.textContent = 'Try Gomart'; hb.onclick = () => window.location.href = 'index.html'; }
+    } else { guest.style.display = 'flex'; pw.style.display = 'none'; }
+}
+function toggleProfile() { document.getElementById('profileWrap').classList.toggle('open'); }
+function logout() { localStorage.removeItem('gomart_user'); location.reload(); }
+document.addEventListener('click', e => { const w = document.getElementById('profileWrap'); if (w && !w.contains(e.target)) w.classList.remove('open'); });
+initAuth();
 </script>
 </body>
 </html>
